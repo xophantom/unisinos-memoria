@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jogo da Memória",
-  description: "Jogo da memória",
+  title: "Jogo da Memória — Unisinos Start",
+  description: "Encontre os pares de cursos e descubra as Escolas da Unisinos.",
 };
 
 export default function RootLayout({
@@ -23,11 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        lang="pt-BR"
-      >
+    <html lang="pt-BR">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>

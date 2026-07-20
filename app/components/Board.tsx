@@ -4,7 +4,7 @@ import Card from './Card';
 import type { BoardCard } from '../lib/gameReducer';
 import type { Difficulty } from '../lib/difficulty';
 
-const GRID: Record<Difficulty, string> = {
+export const GRID: Record<Difficulty, string> = {
   easy: 'grid-cols-3 sm:grid-cols-4',
   medium: 'grid-cols-4 sm:grid-cols-5',
   hard: 'grid-cols-4 sm:grid-cols-6 lg:grid-cols-8',

@@ -43,7 +43,7 @@ export function useMemoryGame(difficulty: Difficulty): {
     if (state.phase !== 'peek') return;
     const t = setTimeout(() => dispatch({ type: 'END_PEEK' }), PEEK_MS);
     return () => clearTimeout(t);
-  }, [state.phase]);
+  }, [state.phase, state.gameId]);
 
   // resolve o par após duas cartas viradas
   useEffect(() => {

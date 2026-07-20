@@ -11,6 +11,7 @@ export interface GameState {
   matches: number;
   totalPairs: number;
   phase: Phase;
+  gameId: number;
 }
 
 export type GameAction =
@@ -26,6 +27,7 @@ export const initialState: GameState = {
   matches: 0,
   totalPairs: 0,
   phase: 'idle',
+  gameId: 0,
 };
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -38,6 +40,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         matches: 0,
         totalPairs: action.totalPairs,
         phase: 'peek',
+        gameId: state.gameId + 1,
       };
 
     case 'END_PEEK':

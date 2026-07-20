@@ -28,4 +28,9 @@ describe('persistência', () => {
     const r = loadRecords();
     expect(r.easy).toEqual({ bestMoves: 8, bestTime: 40 });
   });
+
+  it('loadRecords preenche campos ausentes de uma entrada parcial corrompida', () => {
+    window.localStorage.setItem('unisinos-memoria-records', JSON.stringify({ easy: { bestMoves: 5 } }));
+    expect(loadRecords().easy).toEqual({ bestMoves: 5, bestTime: null });
+  });
 });

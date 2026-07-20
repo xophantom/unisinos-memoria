@@ -24,13 +24,19 @@ export function mergeBest(prev: BestScore, result: { moves: number; time: number
 }
 
 export function loadRecords(): Records {
-  if (typeof window === 'undefined') return emptyRecords();
+  const defaults = emptyRecords();
+  if (typeof window === 'undefined') return defaults;
   try {
     const raw = window.localStorage.getItem(KEY);
-    if (!raw) return emptyRecords();
-    return { ...emptyRecords(), ...JSON.parse(raw) };
+    if (!raw) return defaults;
+    const parsed = JSON.parse(raw) as Partial<Record<Difficulty, Partial<BestScore>>>;
+    return {
+      easy: { ...defaults.easy, ...parsed.easy },
+      medium: { ...defaults.medium, ...parsed.medium },
+      hard: { ...defaults.hard, ...parsed.hard },
+    };
   } catch {
-    return emptyRecords();
+    return defaults;
   }
 }
 

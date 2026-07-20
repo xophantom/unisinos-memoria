@@ -5,7 +5,7 @@ import { RotateCcw } from 'lucide-react';
 import Header from './Header';
 import DifficultySelector from './DifficultySelector';
 import Scoreboard from './Scoreboard';
-import Board from './Board';
+import Board, { GRID } from './Board';
 import VictoryModal from './VictoryModal';
 import { useMemoryGame } from '../hooks/useMemoryGame';
 import { PAIRS, type Difficulty } from '../lib/difficulty';
@@ -26,35 +26,40 @@ export default function GameBoard() {
     : [];
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-4xl mx-auto px-4 py-8">
-      <Header />
-      <DifficultySelector value={difficulty} onChange={setDifficulty} />
-      <Scoreboard
-        moves={state.moves}
-        matches={state.matches}
-        totalPairs={totalPairs}
-        time={time}
-        best={best}
-      />
-
-      {state.cards.length > 0 ? (
-        <Board cards={state.cards} difficulty={difficulty} locked={locked} onFlip={flip} />
-      ) : (
-        <div className="grid grid-cols-4 gap-3 w-full">
-          {Array.from({ length: totalPairs * 2 }).map((_, i) => (
-            <div key={i} className="aspect-square rounded-xl bg-neutral-200 animate-pulse" />
-          ))}
-        </div>
-      )}
-
-      <button
-        type="button"
-        onClick={restart}
-        className="flex items-center gap-2 px-6 py-3 bg-white ring-1 ring-neutral-200 hover:bg-neutral-50 text-neutral-700 font-semibold rounded-full transition-all"
+    <>
+      <div
+        className="flex flex-col items-center gap-6 w-full max-w-4xl mx-auto px-4 py-8"
+        inert={won || undefined}
       >
-        <RotateCcw className="w-4 h-4" />
-        Reiniciar
-      </button>
+        <Header />
+        <DifficultySelector value={difficulty} onChange={setDifficulty} />
+        <Scoreboard
+          moves={state.moves}
+          matches={state.matches}
+          totalPairs={totalPairs}
+          time={time}
+          best={best}
+        />
+
+        {state.cards.length > 0 ? (
+          <Board cards={state.cards} difficulty={difficulty} locked={locked} onFlip={flip} />
+        ) : (
+          <div className={`grid ${GRID[difficulty]} gap-3 w-full`}>
+            {Array.from({ length: totalPairs * 2 }).map((_, i) => (
+              <div key={i} className="aspect-square rounded-xl bg-neutral-200 animate-pulse" />
+            ))}
+          </div>
+        )}
+
+        <button
+          type="button"
+          onClick={restart}
+          className="flex items-center gap-2 px-6 py-3 bg-white ring-1 ring-neutral-200 hover:bg-neutral-50 text-neutral-700 font-semibold rounded-full transition-all"
+        >
+          <RotateCcw className="w-4 h-4" />
+          Reiniciar
+        </button>
+      </div>
 
       {won && (
         <VictoryModal
@@ -65,6 +70,6 @@ export default function GameBoard() {
           onRestart={restart}
         />
       )}
-    </div>
+    </>
   );
 }

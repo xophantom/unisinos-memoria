@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { Trophy, Star } from 'lucide-react';
 import type { School } from '../data/schools';
 import { formatTime } from '../lib/format';
@@ -13,11 +14,20 @@ interface Props {
 }
 
 export default function VictoryModal({ moves, time, stars, schools, onRestart }: Props) {
+  const restartRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    restartRef.current?.focus();
+  }, []);
+
   return (
     <div
       role="dialog"
       aria-modal="true"
       aria-label="Vitória"
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') onRestart();
+      }}
       className="fixed inset-0 z-20 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
     >
       <div className="bg-white rounded-3xl p-8 text-center shadow-2xl max-w-sm w-full">
@@ -46,6 +56,7 @@ export default function VictoryModal({ moves, time, stars, schools, onRestart }:
           ))}
         </div>
         <button
+          ref={restartRef}
           type="button"
           onClick={onRestart}
           className="mt-2 bg-unisinos hover:bg-unisinos-dark text-white px-8 py-3 rounded-full font-bold transition-colors"

@@ -6,4 +6,6 @@ export const DIFFICULTIES: { id: Difficulty; label: string; pairs: number }[] = 
   { id: 'hard', label: 'Difícil', pairs: 16 },
 ];
 
-export const PAIRS: Record<Difficulty, number> = { easy: 6, medium: 10, hard: 16 };
+export const PAIRS: Record<Difficulty, number> = Object.fromEntries(
+  DIFFICULTIES.map((d) => [d.id, d.pairs]),
+) as Record<Difficulty, number>;

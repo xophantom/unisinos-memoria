@@ -1,47 +1,60 @@
 'use client';
 
 import type { Course } from '../data/courses';
+import { getSchool } from '../data/schools';
 
 interface CardProps {
   id: number;
   course: Course;
   isFlipped: boolean;
   isMatched: boolean;
-  onClick: (id: number) => void;
+  locked: boolean;
+  onFlip: (id: number) => void;
 }
 
-export default function Card({ id, course, isFlipped, isMatched, onClick }: CardProps) {
-  const { Icon, label, bg, text } = course;
+export default function Card({ id, course, isFlipped, isMatched, locked, onFlip }: CardProps) {
+  const school = getSchool(course.schoolId);
+  const { Icon, label } = course;
+  const faceUp = isFlipped || isMatched;
+  const ariaLabel = faceUp ? `${label} — Escola ${school.label}` : 'Carta fechada';
+
+  const handleClick = () => {
+    if (faceUp || locked) return;
+    onFlip(id);
+  };
 
   return (
-    <div
-      className="w-full aspect-square cursor-pointer perspective-1000"
-      onClick={() => !isFlipped && !isMatched && onClick(id)}
+    <button
+      type="button"
+      aria-label={ariaLabel}
+      aria-pressed={faceUp}
+      onClick={handleClick}
+      className="group w-full aspect-square perspective-1000 rounded-xl focus:outline-none focus-visible:ring-4 focus-visible:ring-unisinos/40"
     >
       <div
-        className={`relative w-full h-full transition-transform duration-500 transform-style-3d ${
-          isFlipped || isMatched ? 'rotate-y-180' : ''
+        className={`card-flip relative w-full h-full transition-transform duration-500 transform-style-3d ${
+          faceUp ? 'rotate-y-180' : ''
         }`}
       >
-        {/* Frente da carta (fechada) */}
-        <div className="absolute inset-0 backface-hidden rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg border-2 border-indigo-400 hover:from-indigo-400 hover:to-purple-500 transition-colors">
-          <span className="text-white text-2xl font-bold select-none">?</span>
+        {/* Frente (fechada) */}
+        <div className="absolute inset-0 backface-hidden rounded-xl bg-gradient-to-br from-unisinos to-unisinos-dark flex items-center justify-center shadow-md ring-1 ring-black/5 group-hover:brightness-110 transition">
+          <span className="text-white/90 text-2xl font-black select-none">?</span>
         </div>
 
-        {/* Verso da carta (curso) */}
+        {/* Verso (curso) */}
         <div
-          className={`absolute inset-0 backface-hidden rotate-y-180 rounded-xl flex flex-col items-center justify-center gap-1 shadow-lg border-2 transition-colors p-1 ${
+          className={`absolute inset-0 backface-hidden rotate-y-180 rounded-xl flex flex-col items-center justify-center gap-1 p-1.5 shadow-md text-white ring-1 transition ${
             isMatched
-              ? 'bg-gradient-to-br from-green-400 to-emerald-600 border-green-300 text-white'
-              : `bg-gradient-to-br ${bg} border-white/20 ${text}`
+              ? 'ring-2 ring-emerald-300 bg-gradient-to-br from-emerald-400 to-emerald-600'
+              : `ring-white/20 bg-gradient-to-br ${school.gradient}`
           }`}
         >
-          <Icon className="w-1/3 h-1/3 shrink-0" strokeWidth={1.5} />
-          <span className="text-center font-semibold leading-tight select-none whitespace-pre-line text-[clamp(0.45rem,1.5vw,0.75rem)]">
+          <Icon className="w-1/3 h-1/3 shrink-0" strokeWidth={1.5} aria-hidden />
+          <span className="text-center font-semibold leading-tight select-none text-[clamp(0.5rem,1.6vw,0.8rem)]">
             {label}
           </span>
         </div>
       </div>
-    </div>
+    </button>
   );
 }

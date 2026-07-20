@@ -23,4 +23,22 @@ describe('useMemoryGame', () => {
     act(() => { result.current.flip(0); });
     expect(result.current.state.flipped).toEqual([]);
   });
+
+  it('cronômetro continua contando durante a transição playing → checking', () => {
+    const { result } = renderHook(() => useMemoryGame('easy'));
+    act(() => { vi.advanceTimersByTime(0); }); // monta o baralho (phase 'peek')
+    act(() => { vi.advanceTimersByTime(2500); }); // fim da espiada -> 'playing'
+
+    act(() => { result.current.flip(0); });
+    expect(result.current.state.phase).toBe('playing');
+
+    act(() => { vi.advanceTimersByTime(900); }); // ainda não completou 1000ms
+
+    act(() => { result.current.flip(1); }); // duas cartas viradas -> 'checking'
+    expect(result.current.state.phase).toBe('checking');
+
+    act(() => { vi.advanceTimersByTime(200); }); // total de 1100ms contínuos de tique-taque
+
+    expect(result.current.time).toBe(1);
+  });
 });

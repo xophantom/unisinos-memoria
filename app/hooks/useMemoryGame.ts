@@ -58,12 +58,12 @@ export function useMemoryGame(difficulty: Difficulty): {
 
   // cronômetro: começa no primeiro clique real, para na vitória
   const started = state.moves > 0 || state.flipped.length > 0;
+  const isTicking = started && (state.phase === 'playing' || state.phase === 'checking');
   useEffect(() => {
-    if (!started) return;
-    if (state.phase === 'won' || state.phase === 'idle' || state.phase === 'peek') return;
+    if (!isTicking) return;
     const iv = setInterval(() => setTime((t) => t + 1), 1000);
     return () => clearInterval(iv);
-  }, [started, state.phase]);
+  }, [isTicking]);
 
   // persiste recorde ao vencer (uma vez)
   useEffect(() => {

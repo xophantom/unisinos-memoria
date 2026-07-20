@@ -1,46 +1,88 @@
 import {
-  Monitor,
-  Stethoscope,
-  Scale,
-  Wrench,
-  Brain,
-  Building2,
-  Briefcase,
-  Calculator,
-  Atom,
-  FlaskConical,
-  Microscope,
-  BookOpen,
-  Landmark,
-  Lightbulb,
-  Dumbbell,
-  TrendingUp,
+  // Politécnica
+  Code2, DraftingCompass, Dna, Cpu, Construction, CircuitBoard, Bot, Factory,
+  Zap, Wrench, FlaskConical, Boxes, Network, BrainCircuit, Sigma, ShieldCheck,
+  Database, Globe,
+  // Artes, Humanidades e Economia Criativa
+  Palette, PenTool, Lightbulb, ChefHat, ScrollText, Gamepad2, Newspaper, BookOpen,
+  Shirt, Backpack, Video, Music, Megaphone, Clapperboard, Users,
+  // Gestão e Negócios
+  Briefcase, Calculator, TrendingUp, Ship, ShoppingCart, UsersRound, Wallet,
+  Building2, Truck, Target, Workflow,
+  // Saúde
+  Microscope, Dumbbell, Syringe, Pill, Accessibility, Stethoscope, Salad, Brain,
+  // Direito / RI
+  Scale, Earth,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import type { SchoolId } from './schools';
 
 export interface Course {
   id: string;
   label: string;
+  schoolId: SchoolId;
   Icon: LucideIcon;
-  bg: string;
-  text: string;
 }
 
 export const COURSES: Course[] = [
-  { id: 'computacao',    label: 'Ciência da\nComputação', Icon: Monitor,      bg: 'from-blue-500 to-blue-700',       text: 'text-blue-50' },
-  { id: 'medicina',      label: 'Medicina',               Icon: Stethoscope,  bg: 'from-red-500 to-rose-700',        text: 'text-red-50' },
-  { id: 'direito',       label: 'Direito',                Icon: Scale,        bg: 'from-slate-500 to-slate-700',     text: 'text-slate-50' },
-  { id: 'engenharia',    label: 'Engenharia',             Icon: Wrench,       bg: 'from-orange-500 to-amber-700',    text: 'text-orange-50' },
-  { id: 'psicologia',    label: 'Psicologia',             Icon: Brain,        bg: 'from-purple-500 to-violet-700',   text: 'text-purple-50' },
-  { id: 'arquitetura',   label: 'Arquitetura',            Icon: Building2,    bg: 'from-stone-500 to-stone-700',     text: 'text-stone-50' },
-  { id: 'administracao', label: 'Administração',          Icon: Briefcase,    bg: 'from-sky-500 to-cyan-700',        text: 'text-sky-50' },
-  { id: 'matematica',    label: 'Matemática',             Icon: Calculator,   bg: 'from-teal-500 to-teal-700',       text: 'text-teal-50' },
-  { id: 'fisica',        label: 'Física',                 Icon: Atom,         bg: 'from-violet-500 to-indigo-700',   text: 'text-violet-50' },
-  { id: 'quimica',       label: 'Química',                Icon: FlaskConical, bg: 'from-lime-500 to-green-700',      text: 'text-lime-50' },
-  { id: 'biologia',      label: 'Biologia',               Icon: Microscope,   bg: 'from-emerald-500 to-emerald-700', text: 'text-emerald-50' },
-  { id: 'letras',        label: 'Letras',                 Icon: BookOpen,     bg: 'from-amber-500 to-yellow-700',    text: 'text-amber-50' },
-  { id: 'historia',      label: 'História',               Icon: Landmark,     bg: 'from-yellow-600 to-orange-700',   text: 'text-yellow-50' },
-  { id: 'filosofia',     label: 'Filosofia',              Icon: Lightbulb,    bg: 'from-indigo-500 to-blue-700',     text: 'text-indigo-50' },
-  { id: 'ed-fisica',     label: 'Educação\nFísica',       Icon: Dumbbell,     bg: 'from-green-500 to-teal-700',      text: 'text-green-50' },
-  { id: 'economia',      label: 'Economia',               Icon: TrendingUp,   bg: 'from-cyan-500 to-sky-700',        text: 'text-cyan-50' },
+  // Politécnica (18)
+  { id: 'ads', label: 'Análise e Desenvolvimento de Sistemas', schoolId: 'politecnica', Icon: Code2 },
+  { id: 'arquitetura', label: 'Arquitetura e Urbanismo', schoolId: 'politecnica', Icon: DraftingCompass },
+  { id: 'biologia', label: 'Biologia', schoolId: 'politecnica', Icon: Dna },
+  { id: 'computacao', label: 'Ciência da Computação', schoolId: 'politecnica', Icon: Cpu },
+  { id: 'eng-civil', label: 'Engenharia Civil', schoolId: 'politecnica', Icon: Construction },
+  { id: 'eng-computacao', label: 'Engenharia da Computação', schoolId: 'politecnica', Icon: CircuitBoard },
+  { id: 'eng-automacao', label: 'Engenharia de Controle e Automação', schoolId: 'politecnica', Icon: Bot },
+  { id: 'eng-producao', label: 'Engenharia de Produção', schoolId: 'politecnica', Icon: Factory },
+  { id: 'eng-eletrica', label: 'Engenharia Elétrica', schoolId: 'politecnica', Icon: Zap },
+  { id: 'eng-mecanica', label: 'Engenharia Mecânica', schoolId: 'politecnica', Icon: Wrench },
+  { id: 'eng-quimica', label: 'Engenharia Química', schoolId: 'politecnica', Icon: FlaskConical },
+  { id: 'gestao-producao', label: 'Gestão da Produção Industrial', schoolId: 'politecnica', Icon: Boxes },
+  { id: 'gestao-ti', label: 'Gestão da Tecnologia da Informação', schoolId: 'politecnica', Icon: Network },
+  { id: 'ia', label: 'Inteligência Artificial', schoolId: 'politecnica', Icon: BrainCircuit },
+  { id: 'matematica', label: 'Matemática', schoolId: 'politecnica', Icon: Sigma },
+  { id: 'seguranca', label: 'Segurança da Informação', schoolId: 'politecnica', Icon: ShieldCheck },
+  { id: 'sistemas-info', label: 'Sistemas da Informação', schoolId: 'politecnica', Icon: Database },
+  { id: 'sistemas-internet', label: 'Sistemas para Internet', schoolId: 'politecnica', Icon: Globe },
+  // Artes, Humanidades e Economia Criativa (15)
+  { id: 'bihat', label: 'Artes, Humanidades e Tecnologia', schoolId: 'artes', Icon: Palette },
+  { id: 'design', label: 'Design', schoolId: 'artes', Icon: PenTool },
+  { id: 'filosofia', label: 'Filosofia', schoolId: 'artes', Icon: Lightbulb },
+  { id: 'gastronomia', label: 'Gastronomia', schoolId: 'artes', Icon: ChefHat },
+  { id: 'historia', label: 'História', schoolId: 'artes', Icon: ScrollText },
+  { id: 'jogos', label: 'Jogos Digitais', schoolId: 'artes', Icon: Gamepad2 },
+  { id: 'jornalismo', label: 'Jornalismo', schoolId: 'artes', Icon: Newspaper },
+  { id: 'letras', label: 'Letras', schoolId: 'artes', Icon: BookOpen },
+  { id: 'moda', label: 'Moda', schoolId: 'artes', Icon: Shirt },
+  { id: 'pedagogia', label: 'Pedagogia', schoolId: 'artes', Icon: Backpack },
+  { id: 'prod-audiovisual', label: 'Produção Audiovisual', schoolId: 'artes', Icon: Video },
+  { id: 'prod-fonografica', label: 'Produção Fonográfica', schoolId: 'artes', Icon: Music },
+  { id: 'publicidade', label: 'Publicidade e Propaganda', schoolId: 'artes', Icon: Megaphone },
+  { id: 'realizacao-audiovisual', label: 'Realização Audiovisual', schoolId: 'artes', Icon: Clapperboard },
+  { id: 'relacoes-publicas', label: 'Relações Públicas', schoolId: 'artes', Icon: Users },
+  // Gestão e Negócios (11)
+  { id: 'administracao', label: 'Administração', schoolId: 'gestao', Icon: Briefcase },
+  { id: 'contabeis', label: 'Ciências Contábeis', schoolId: 'gestao', Icon: Calculator },
+  { id: 'economicas', label: 'Ciências Econômicas', schoolId: 'gestao', Icon: TrendingUp },
+  { id: 'comercio-exterior', label: 'Comércio Exterior', schoolId: 'gestao', Icon: Ship },
+  { id: 'gestao-comercial', label: 'Gestão Comercial', schoolId: 'gestao', Icon: ShoppingCart },
+  { id: 'rh', label: 'Gestão de Recursos Humanos', schoolId: 'gestao', Icon: UsersRound },
+  { id: 'gestao-financeira', label: 'Gestão Financeira', schoolId: 'gestao', Icon: Wallet },
+  { id: 'gestao-publica', label: 'Gestão Pública', schoolId: 'gestao', Icon: Building2 },
+  { id: 'logistica', label: 'Logística', schoolId: 'gestao', Icon: Truck },
+  { id: 'marketing', label: 'Marketing', schoolId: 'gestao', Icon: Target },
+  { id: 'processos', label: 'Processos Gerenciais', schoolId: 'gestao', Icon: Workflow },
+  // Saúde (8)
+  { id: 'biomedicina', label: 'Biomedicina', schoolId: 'saude', Icon: Microscope },
+  { id: 'ed-fisica', label: 'Educação Física', schoolId: 'saude', Icon: Dumbbell },
+  { id: 'enfermagem', label: 'Enfermagem', schoolId: 'saude', Icon: Syringe },
+  { id: 'farmacia', label: 'Farmácia', schoolId: 'saude', Icon: Pill },
+  { id: 'fisioterapia', label: 'Fisioterapia', schoolId: 'saude', Icon: Accessibility },
+  { id: 'medicina', label: 'Medicina', schoolId: 'saude', Icon: Stethoscope },
+  { id: 'nutricao', label: 'Nutrição', schoolId: 'saude', Icon: Salad },
+  { id: 'psicologia', label: 'Psicologia', schoolId: 'saude', Icon: Brain },
+  // Direito (1)
+  { id: 'direito', label: 'Direito', schoolId: 'direito', Icon: Scale },
+  // Direito e Relações Internacionais (1)
+  { id: 'relacoes-internacionais', label: 'Relações Internacionais', schoolId: 'direito-ri', Icon: Earth },
 ];

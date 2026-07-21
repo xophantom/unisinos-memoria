@@ -1,63 +1,70 @@
 'use client';
 
-import { useState } from 'react';
 import { RotateCcw } from 'lucide-react';
-import Header from './Header';
-import DifficultySelector from './DifficultySelector';
 import Scoreboard from './Scoreboard';
-import Board, { GRID } from './Board';
+import Board from './Board';
 import VictoryModal from './VictoryModal';
 import { useMemoryGame } from '../hooks/useMemoryGame';
-import { PAIRS, type Difficulty } from '../lib/difficulty';
+import { PAIRS_PER_GAME, type Area } from '../data/areas';
 import { calcStars } from '../lib/scoring';
 import { getSchool, type SchoolId } from '../data/schools';
 
-export default function GameBoard() {
-  const [difficulty, setDifficulty] = useState<Difficulty>('easy');
-  const { state, time, records, flip, restart } = useMemoryGame(difficulty);
+interface Props {
+  area: Area;
+  onRestartQuiz: () => void;
+}
 
-  const totalPairs = PAIRS[difficulty];
+export default function GameBoard({ area, onRestartQuiz }: Props) {
+  const { state, time, records, flip, restart } = useMemoryGame(area);
+
   const locked = state.phase !== 'playing';
-  const best = records ? records[difficulty] : null;
+  const best = records ? records[area.id] : null;
   const won = state.phase === 'won';
-  const stars = calcStars(state.moves, totalPairs);
+  const stars = calcStars(state.moves, PAIRS_PER_GAME);
   const schoolsInGame = won
     ? Array.from(new Set(state.cards.map((c) => c.course.schoolId))).map((id: SchoolId) => getSchool(id))
     : [];
 
   return (
-    <>
-      <div
-        className="flex flex-col items-center gap-6 w-full max-w-4xl mx-auto px-4 py-8"
-        inert={won || undefined}
-      >
-        <Header />
-        <DifficultySelector value={difficulty} onChange={setDifficulty} />
-        <Scoreboard
-          moves={state.moves}
-          matches={state.matches}
-          totalPairs={totalPairs}
-          time={time}
-          best={best}
-        />
+    <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto">
+      <div className="flex items-center gap-2 text-sm font-semibold text-neutral-500">
+        <span className="text-lg" aria-hidden>{area.emoji}</span>
+        {area.label}
+      </div>
 
-        {state.cards.length > 0 ? (
-          <Board cards={state.cards} difficulty={difficulty} locked={locked} onFlip={flip} />
-        ) : (
-          <div className={`grid ${GRID[difficulty]} gap-3 w-full`}>
-            {Array.from({ length: totalPairs * 2 }).map((_, i) => (
-              <div key={i} className="aspect-square rounded-xl bg-neutral-200 animate-pulse" />
-            ))}
-          </div>
-        )}
+      <Scoreboard
+        moves={state.moves}
+        matches={state.matches}
+        totalPairs={PAIRS_PER_GAME}
+        time={time}
+        best={best}
+      />
 
+      {state.cards.length > 0 ? (
+        <Board cards={state.cards} locked={locked} onFlip={flip} />
+      ) : (
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 w-full">
+          {Array.from({ length: PAIRS_PER_GAME * 2 }).map((_, i) => (
+            <div key={i} className="aspect-square rounded-xl bg-neutral-200 animate-pulse" />
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={restart}
           className="flex items-center gap-2 px-6 py-3 bg-white ring-1 ring-neutral-200 hover:bg-neutral-50 text-neutral-700 font-semibold rounded-full transition-all"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw className="w-4 h-4" aria-hidden />
           Reiniciar
+        </button>
+        <button
+          type="button"
+          onClick={onRestartQuiz}
+          className="px-6 py-3 text-neutral-500 hover:text-neutral-800 font-semibold rounded-full transition-colors"
+        >
+          Refazer o teste
         </button>
       </div>
 
@@ -68,8 +75,9 @@ export default function GameBoard() {
           stars={stars}
           schools={schoolsInGame}
           onRestart={restart}
+          onRestartQuiz={onRestartQuiz}
         />
       )}
-    </>
+    </div>
   );
 }

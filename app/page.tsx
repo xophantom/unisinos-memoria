@@ -1,9 +1,9 @@
-import GameBoard from './components/GameBoard';
+import GameFlow from './components/GameFlow';
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-surface flex items-start justify-center">
-      <GameBoard />
+      <GameFlow />
     </main>
   );
 }

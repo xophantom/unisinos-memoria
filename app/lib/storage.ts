@@ -1,19 +1,19 @@
-import type { Difficulty } from './difficulty';
+import type { AreaId } from '../data/areas';
 
 export interface BestScore {
   bestMoves: number | null;
   bestTime: number | null;
 }
-export type Records = Record<Difficulty, BestScore>;
+export type Records = Record<AreaId, BestScore>;
 
-const KEY = 'unisinos-memoria-records';
+const KEY = 'unisinos-memoria-records-areas';
+const AREA_IDS: AreaId[] = ['tecnologia', 'saude', 'negocios', 'artes', 'ciencias'];
 
 export function emptyRecords(): Records {
-  return {
-    easy: { bestMoves: null, bestTime: null },
-    medium: { bestMoves: null, bestTime: null },
-    hard: { bestMoves: null, bestTime: null },
-  };
+  return AREA_IDS.reduce((acc, id) => {
+    acc[id] = { bestMoves: null, bestTime: null };
+    return acc;
+  }, {} as Records);
 }
 
 export function mergeBest(prev: BestScore, result: { moves: number; time: number }): BestScore {
@@ -24,25 +24,30 @@ export function mergeBest(prev: BestScore, result: { moves: number; time: number
 }
 
 export function loadRecords(): Records {
-  const defaults = emptyRecords();
-  if (typeof window === 'undefined') return defaults;
+  if (typeof window === 'undefined') return emptyRecords();
   try {
     const raw = window.localStorage.getItem(KEY);
-    if (!raw) return defaults;
-    const parsed = JSON.parse(raw) as Partial<Record<Difficulty, Partial<BestScore>>>;
-    return {
-      easy: { ...defaults.easy, ...parsed.easy },
-      medium: { ...defaults.medium, ...parsed.medium },
-      hard: { ...defaults.hard, ...parsed.hard },
-    };
+    if (!raw) return emptyRecords();
+    const parsed = JSON.parse(raw) as Partial<Record<AreaId, Partial<BestScore>>>;
+    const base = emptyRecords();
+    for (const id of AREA_IDS) {
+      const entry = parsed[id];
+      if (entry) {
+        base[id] = {
+          bestMoves: entry.bestMoves ?? null,
+          bestTime: entry.bestTime ?? null,
+        };
+      }
+    }
+    return base;
   } catch {
-    return defaults;
+    return emptyRecords();
   }
 }
 
-export function saveResult(difficulty: Difficulty, result: { moves: number; time: number }): Records {
+export function saveResult(areaId: AreaId, result: { moves: number; time: number }): Records {
   const records = loadRecords();
-  const next: Records = { ...records, [difficulty]: mergeBest(records[difficulty], result) };
+  const next: Records = { ...records, [areaId]: mergeBest(records[areaId], result) };
   if (typeof window !== 'undefined') {
     try {
       window.localStorage.setItem(KEY, JSON.stringify(next));

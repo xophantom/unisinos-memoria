@@ -11,9 +11,10 @@ interface Props {
   stars: 1 | 2 | 3;
   schools: School[];
   onRestart: () => void;
+  onRestartQuiz: () => void;
 }
 
-export default function VictoryModal({ moves, time, stars, schools, onRestart }: Props) {
+export default function VictoryModal({ moves, time, stars, schools, onRestart, onRestartQuiz }: Props) {
   const restartRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -55,14 +56,23 @@ export default function VictoryModal({ moves, time, stars, schools, onRestart }:
             </span>
           ))}
         </div>
-        <button
-          ref={restartRef}
-          type="button"
-          onClick={onRestart}
-          className="mt-2 bg-unisinos hover:bg-unisinos-dark text-white px-8 py-3 rounded-full font-bold transition-colors"
-        >
-          Jogar novamente
-        </button>
+        <div className="mt-2 flex flex-col gap-2">
+          <button
+            ref={restartRef}
+            type="button"
+            onClick={onRestart}
+            className="bg-unisinos hover:bg-unisinos-dark text-white px-8 py-3 rounded-full font-bold transition-colors"
+          >
+            Jogar de novo
+          </button>
+          <button
+            type="button"
+            onClick={onRestartQuiz}
+            className="text-neutral-500 hover:text-neutral-800 font-semibold text-sm transition-colors"
+          >
+            Refazer o teste
+          </button>
+        </div>
       </div>
     </div>
   );

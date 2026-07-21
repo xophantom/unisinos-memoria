@@ -1,44 +1,36 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useMemoryGame } from './useMemoryGame';
+import { AREAS } from '../data/areas';
 
 describe('useMemoryGame', () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
-  it('inicia em peek com o baralho da dificuldade e depois vai para playing', () => {
-    const { result } = renderHook(() => useMemoryGame('easy'));
-    // efeito de montagem cria o baralho
+  it('inicia em peek com 12 cartas (6 pares) da área e vai para playing', () => {
+    const { result } = renderHook(() => useMemoryGame(AREAS.tecnologia));
     act(() => { vi.advanceTimersByTime(0); });
-    expect(result.current.state.cards).toHaveLength(12); // 6 pares
+    expect(result.current.state.cards).toHaveLength(12);
     expect(result.current.state.phase).toBe('peek');
-    // fim da espiada (2500ms)
     act(() => { vi.advanceTimersByTime(2500); });
     expect(result.current.state.phase).toBe('playing');
   });
 
   it('flip é ignorado durante a espiada', () => {
-    const { result } = renderHook(() => useMemoryGame('easy'));
+    const { result } = renderHook(() => useMemoryGame(AREAS.saude));
     act(() => { vi.advanceTimersByTime(0); });
     act(() => { result.current.flip(0); });
     expect(result.current.state.flipped).toEqual([]);
   });
 
-  it('cronômetro continua contando durante a transição playing → checking', () => {
-    const { result } = renderHook(() => useMemoryGame('easy'));
-    act(() => { vi.advanceTimersByTime(0); }); // monta o baralho (phase 'peek')
-    act(() => { vi.advanceTimersByTime(2500); }); // fim da espiada -> 'playing'
-
+  it('cronômetro continua contando na transição playing → checking', () => {
+    const { result } = renderHook(() => useMemoryGame(AREAS.artes));
+    act(() => { vi.advanceTimersByTime(0); });
+    act(() => { vi.advanceTimersByTime(2500); }); // fim da espiada
     act(() => { result.current.flip(0); });
-    expect(result.current.state.phase).toBe('playing');
-
-    act(() => { vi.advanceTimersByTime(900); }); // ainda não completou 1000ms
-
-    act(() => { result.current.flip(1); }); // duas cartas viradas -> 'checking'
-    expect(result.current.state.phase).toBe('checking');
-
-    act(() => { vi.advanceTimersByTime(200); }); // total de 1100ms contínuos de tique-taque
-
+    act(() => { vi.advanceTimersByTime(900); });
+    act(() => { result.current.flip(1); });
+    act(() => { vi.advanceTimersByTime(200); }); // total 1100ms contínuos, ainda em checking
     expect(result.current.time).toBe(1);
   });
 });

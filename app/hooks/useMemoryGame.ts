@@ -4,14 +4,14 @@
 import { useReducer, useEffect, useState, useCallback, useRef } from 'react';
 import { gameReducer, initialState, type GameState } from '../lib/gameReducer';
 import { buildDeck } from '../lib/deck';
-import { PAIRS, type Difficulty } from '../lib/difficulty';
+import { getAreaCourses, PAIRS_PER_GAME, type Area } from '../data/areas';
 import { saveResult, loadRecords, type Records } from '../lib/storage';
 
 const PEEK_MS = 2500;
 const MATCH_MS = 500;
 const MISMATCH_MS = 1000;
 
-export function useMemoryGame(difficulty: Difficulty): {
+export function useMemoryGame(area: Area): {
   state: GameState;
   time: number;
   records: Records | null;
@@ -27,18 +27,22 @@ export function useMemoryGame(difficulty: Difficulty): {
     setRecords(loadRecords());
   }, []);
 
-  const newGame = useCallback((diff: Difficulty) => {
+  const newGame = useCallback((a: Area) => {
     savedRef.current = false;
     setTime(0);
-    dispatch({ type: 'NEW_GAME', cards: buildDeck(PAIRS[diff]), totalPairs: PAIRS[diff] });
+    dispatch({
+      type: 'NEW_GAME',
+      cards: buildDeck(PAIRS_PER_GAME, getAreaCourses(a.id)),
+      totalPairs: PAIRS_PER_GAME,
+    });
   }, []);
 
-  // (re)inicia ao trocar dificuldade e na montagem (client-only evita hydration mismatch)
+  // (re)inicia ao trocar de área e na montagem
   useEffect(() => {
-    newGame(difficulty);
-  }, [difficulty, newGame]);
+    newGame(area);
+  }, [area, newGame]);
 
-  // fim da espiada
+  // fim da espiada — reinicia a cada novo jogo (state.gameId muda)
   useEffect(() => {
     if (state.phase !== 'peek') return;
     const t = setTimeout(() => dispatch({ type: 'END_PEEK' }), PEEK_MS);
@@ -56,7 +60,7 @@ export function useMemoryGame(difficulty: Difficulty): {
     return () => clearTimeout(t);
   }, [state.phase, state.flipped, state.cards]);
 
-  // cronômetro: começa no primeiro clique real, para na vitória
+  // cronômetro contínuo durante playing/checking, após o primeiro flip
   const started = state.moves > 0 || state.flipped.length > 0;
   const isTicking = started && (state.phase === 'playing' || state.phase === 'checking');
   useEffect(() => {
@@ -65,16 +69,16 @@ export function useMemoryGame(difficulty: Difficulty): {
     return () => clearInterval(iv);
   }, [isTicking]);
 
-  // persiste recorde ao vencer (uma vez)
+  // persiste recorde da área ao vencer (uma vez)
   useEffect(() => {
     if (state.phase === 'won' && !savedRef.current) {
       savedRef.current = true;
-      setRecords(saveResult(difficulty, { moves: state.moves, time }));
+      setRecords(saveResult(area.id, { moves: state.moves, time }));
     }
-  }, [state.phase, difficulty, state.moves, time]);
+  }, [state.phase, area.id, state.moves, time]);
 
   const flip = useCallback((id: number) => dispatch({ type: 'FLIP', id }), []);
-  const restart = useCallback(() => newGame(difficulty), [newGame, difficulty]);
+  const restart = useCallback(() => newGame(area), [newGame, area]);
 
   return { state, time, records, flip, restart };
 }

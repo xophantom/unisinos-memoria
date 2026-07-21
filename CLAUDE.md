@@ -7,33 +7,32 @@ lúdica que envolve o público com o universo acadêmico da universidade.
 
 ## Aplicação
 
-Jogo da memória clássico: o jogador vira duas cartas por vez tentando achar
-**pares do mesmo curso**. Cada carta é pintada com a **cor da Escola** a que o
-curso pertence — então, além de jogar, o participante conhece a estrutura de
-Escolas e cursos da Unisinos. As cartas são embaralhadas a cada partida.
+Antes de jogar, um **mini teste vocacional** de 2 perguntas define uma **área**.
+O jogo então mostra um memória clássico de **6 pares** com cursos daquela área —
+achar pares do mesmo curso, cada carta pintada pela **cor da Escola**.
 
 Fluxo:
-1. O jogador escolhe o nível de dificuldade.
-2. **Espiada inicial:** todas as cartas aparecem viradas por ~2,5s e escondem.
-3. O jogador clica em duas cartas por vez procurando o par.
-4. Par certo permanece; par errado desvira após ~1s.
-5. O jogo termina quando todos os pares são encontrados.
-6. A tela de vitória mostra estrelas, jogadas, tempo e as Escolas que apareceram.
+1. **Pergunta 1** (curiosidade) e **Pergunta 2** (atividade preferida).
+2. As respostas resolvem uma das **5 áreas** (`resolveArea`): a P1 dá a área ampla
+   e a P2 refina o caso "Ciências".
+3. Tela de **resultado** ("Você tem tudo a ver com [Área]!") → botão Começar.
+4. **Jogo:** espiada inicial ~2,5s, depois vira 2 cartas por vez procurando o par.
+5. **Vitória:** estrelas, jogadas, tempo e Escolas que apareceram; botões
+   **Jogar de novo** (mesma área) e **Refazer o teste** (volta às perguntas).
 
 ## Funcionalidades
 
-- **Três dificuldades:** Fácil 6 pares (12 cartas), Médio 10 (20), Difícil 16 (32).
-- **Sorteio geral:** cada partida sorteia N cursos aleatórios do catálogo de 54,
-  misturando Escolas — o tabuleiro é um mosaico de cores diferente a cada jogo.
-- **Espiada inicial** de ~2,5s antes de começar (cronômetro só começa depois).
-- **Animação de flip 3D** (desligada quando o sistema pede "reduzir movimento").
-- **Placar em tempo real:** jogadas, pares encontrados/total, cronômetro.
-- **Recordes persistentes** (localStorage) de menor nº de jogadas e menor tempo,
-  por dificuldade — sobrevivem ao recarregar a página.
+- **Mini teste vocacional** (2 perguntas) como porta de entrada.
+- **5 áreas** que filtram os cursos (pools em `app/data/areas.ts`):
+  Tecnologia e Engenharia, Saúde e Bem-estar, Negócios/Gestão/Direito,
+  Comunicação/Artes/Humanidades, Ciências e Meio Ambiente (cross-escola).
+- **6 pares temáticos** por partida (sem tiers de dificuldade), sorteados do pool da área.
+- **Espiada inicial** ~2,5s; **flip 3D** (respeita "reduzir movimento").
+- **Placar em tempo real:** jogadas, pares, cronômetro.
+- **Recordes persistentes por área** (localStorage): melhor nº de jogadas e menor tempo.
 - **Estrelas (1–3)** por eficiência na tela de vitória.
-- **Botão Reiniciar** a qualquer momento.
-- **Acessibilidade:** cartas são botões (teclado + `aria-label`), região
-  `aria-live` para pares/vitória, layout responsivo (celular e projetor).
+- **Acessibilidade:** cartas e opções são botões (teclado + aria), modal com foco/Escape
+  e fundo `inert`, região `aria-live`, layout responsivo.
 
 ## Cursos e Escolas
 
@@ -69,16 +68,18 @@ Next.js 16, React 19, Tailwind CSS 4, lucide-react. Testes com Vitest +
 
 - `app/data/schools.ts` — as 6 Escolas (cor/ícone).
 - `app/data/courses.ts` — os 54 cursos (`id`, `label`, `schoolId`, `Icon`).
-- `app/lib/difficulty.ts` — níveis e nº de pares.
+- `app/data/areas.ts` — as 5 áreas (label, emoji, cor, pool de `courseIds`) + `PAIRS_PER_GAME`.
+- `app/data/quiz.ts` — as 2 perguntas e `resolveArea(p1, p2)` (pura).
 - `app/lib/deck.ts` — embaralhamento e montagem do baralho.
 - `app/lib/gameReducer.ts` — **reducer puro** com a máquina de estados
   (peek → playing → checking → won). Toda a lógica de jogo, testável sem React.
-- `app/hooks/useMemoryGame.ts` — hook que orquestra reducer + timers (espiada,
-  resolução, cronômetro) + persistência de recordes.
-- `app/lib/scoring.ts` (estrelas), `app/lib/storage.ts` (recordes localStorage,
-  SSR-safe), `app/lib/format.ts` (mm:ss).
-- `app/components/` — `Header`, `DifficultySelector`, `Scoreboard`, `Board`,
-  `Card`, `VictoryModal`; `GameBoard` compõe tudo.
+- `app/hooks/useMemoryGame.ts` — recebe a **área** (pool de cursos, 6 pares fixos)
+  e orquestra reducer + timers (espiada, resolução, cronômetro) + recordes por área.
+- `app/lib/scoring.ts` (estrelas), `app/lib/storage.ts` — recordes por `AreaId`
+  (chave `unisinos-memoria-records-areas`, localStorage, SSR-safe), `app/lib/format.ts` (mm:ss).
+- `app/components/` — `Quiz.tsx` (as 2 perguntas), `AreaReveal.tsx` (tela de
+  resultado), `GameFlow.tsx` (máquina de fluxo `quiz → reveal → game`),
+  `Header`, `Scoreboard`, `Board`, `Card`, `VictoryModal`; `GameBoard` compõe o jogo.
 
 ## Comandos
 

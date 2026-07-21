@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { QUESTION_1, QUESTION_2, type Q1Id, type Q2Id } from '../data/quiz';
 
@@ -11,6 +11,11 @@ interface Props {
 export default function Quiz({ onComplete }: Props) {
   const [p1, setP1] = useState<Q1Id | null>(null);
   const step = p1 === null ? 1 : 2;
+  const headingRef = useRef<HTMLHeadingElement>(null);
+
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, [step]);
 
   return (
     <div className="w-full max-w-lg mx-auto flex flex-col items-center gap-5">
@@ -18,7 +23,13 @@ export default function Quiz({ onComplete }: Props) {
 
       {step === 1 ? (
         <>
-          <h2 className="text-2xl font-extrabold text-neutral-900 text-center">{QUESTION_1.prompt}</h2>
+          <h2
+            ref={headingRef}
+            tabIndex={-1}
+            className="text-2xl font-extrabold text-neutral-900 text-center focus:outline-none"
+          >
+            {QUESTION_1.prompt}
+          </h2>
           <div className="flex flex-col gap-3 w-full">
             {QUESTION_1.options.map((o) => (
               <button
@@ -35,7 +46,13 @@ export default function Quiz({ onComplete }: Props) {
         </>
       ) : (
         <>
-          <h2 className="text-2xl font-extrabold text-neutral-900 text-center">{QUESTION_2.prompt}</h2>
+          <h2
+            ref={headingRef}
+            tabIndex={-1}
+            className="text-2xl font-extrabold text-neutral-900 text-center focus:outline-none"
+          >
+            {QUESTION_2.prompt}
+          </h2>
           <div className="flex flex-col gap-3 w-full">
             {QUESTION_2.options.map((o) => (
               <button

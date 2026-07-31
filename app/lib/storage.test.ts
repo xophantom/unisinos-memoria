@@ -12,21 +12,21 @@ describe('mergeBest', () => {
   });
 });
 
-describe('persistência por área', () => {
+describe('persistência por cluster', () => {
   beforeEach(() => window.localStorage.clear());
 
-  it('emptyRecords tem as 5 áreas nulas', () => {
+  it('emptyRecords tem os 6 clusters nulos', () => {
     const r = emptyRecords();
-    expect(Object.keys(r).sort()).toEqual(['artes', 'ciencias', 'negocios', 'saude', 'tecnologia']);
-    expect(r.tecnologia).toEqual({ bestMoves: null, bestTime: null });
+    expect(Object.keys(r).sort()).toEqual(['analisar', 'criar', 'cuidar', 'desenvolver', 'liderar', 'saber']);
+    expect(r.criar).toEqual({ bestMoves: null, bestTime: null });
   });
-  it('saveResult grava e loadRecords lê o melhor por área', () => {
-    saveResult('tecnologia', { moves: 10, time: 40 });
-    saveResult('tecnologia', { moves: 8, time: 55 });
-    expect(loadRecords().tecnologia).toEqual({ bestMoves: 8, bestTime: 40 });
+  it('saveResult grava e loadRecords lê o melhor por cluster', () => {
+    saveResult('criar', { moves: 10, time: 40 });
+    saveResult('criar', { moves: 8, time: 55 });
+    expect(loadRecords().criar).toEqual({ bestMoves: 8, bestTime: 40 });
   });
   it('tolera JSON parcial corrompido (sem NaN)', () => {
-    window.localStorage.setItem('unisinos-memoria-records-areas', JSON.stringify({ saude: { bestMoves: 5 } }));
-    expect(loadRecords().saude).toEqual({ bestMoves: 5, bestTime: null });
+    window.localStorage.setItem('unisinos-memoria-records-clusters', JSON.stringify({ cuidar: { bestMoves: 5 } }));
+    expect(loadRecords().cuidar).toEqual({ bestMoves: 5, bestTime: null });
   });
 });

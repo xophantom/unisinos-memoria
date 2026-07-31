@@ -1,16 +1,16 @@
-import type { AreaId } from '../data/areas';
+import type { ClusterId } from '../data/clusters';
 
 export interface BestScore {
   bestMoves: number | null;
   bestTime: number | null;
 }
-export type Records = Record<AreaId, BestScore>;
+export type Records = Record<ClusterId, BestScore>;
 
-const KEY = 'unisinos-memoria-records-areas';
-const AREA_IDS: AreaId[] = ['tecnologia', 'saude', 'negocios', 'artes', 'ciencias'];
+const KEY = 'unisinos-memoria-records-clusters';
+const CLUSTER_IDS: ClusterId[] = ['saber', 'cuidar', 'criar', 'analisar', 'liderar', 'desenvolver'];
 
 export function emptyRecords(): Records {
-  return AREA_IDS.reduce((acc, id) => {
+  return CLUSTER_IDS.reduce((acc, id) => {
     acc[id] = { bestMoves: null, bestTime: null };
     return acc;
   }, {} as Records);
@@ -28,9 +28,9 @@ export function loadRecords(): Records {
   try {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return emptyRecords();
-    const parsed = JSON.parse(raw) as Partial<Record<AreaId, Partial<BestScore>>>;
+    const parsed = JSON.parse(raw) as Partial<Record<ClusterId, Partial<BestScore>>>;
     const base = emptyRecords();
-    for (const id of AREA_IDS) {
+    for (const id of CLUSTER_IDS) {
       const entry = parsed[id];
       if (entry) {
         base[id] = {
@@ -45,9 +45,9 @@ export function loadRecords(): Records {
   }
 }
 
-export function saveResult(areaId: AreaId, result: { moves: number; time: number }): Records {
+export function saveResult(clusterId: ClusterId, result: { moves: number; time: number }): Records {
   const records = loadRecords();
-  const next: Records = { ...records, [areaId]: mergeBest(records[areaId], result) };
+  const next: Records = { ...records, [clusterId]: mergeBest(records[clusterId], result) };
   if (typeof window !== 'undefined') {
     try {
       window.localStorage.setItem(KEY, JSON.stringify(next));

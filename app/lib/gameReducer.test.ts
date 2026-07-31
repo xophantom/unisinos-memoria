@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { gameReducer, initialState, type GameState, type BoardCard } from './gameReducer';
 import type { Course } from '../data/courses';
 
-const course = (id: string): Course => ({ id, label: id, schoolId: 'saude', Icon: (() => null) as never });
+const course = (id: string): Course => ({ id, label: id, Icon: (() => null) as never });
 const card = (id: number, courseId: string): BoardCard => ({ id, course: course(courseId), isFlipped: false, isMatched: false });
 
 // baralho fixo: pares (a,a) e (b,b)

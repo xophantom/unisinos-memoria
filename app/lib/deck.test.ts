@@ -4,9 +4,9 @@ import type { Course } from '../data/courses';
 
 const identity = <T,>(a: T[]): T[] => a;
 const mock: Course[] = [
-  { id: 'a', label: 'A', schoolId: 'saude', Icon: (() => null) as never },
-  { id: 'b', label: 'B', schoolId: 'gestao', Icon: (() => null) as never },
-  { id: 'c', label: 'C', schoolId: 'direito', Icon: (() => null) as never },
+  { id: 'a', label: 'A', Icon: (() => null) as never },
+  { id: 'b', label: 'B', Icon: (() => null) as never },
+  { id: 'c', label: 'C', Icon: (() => null) as never },
 ];
 
 describe('buildDeck', () => {

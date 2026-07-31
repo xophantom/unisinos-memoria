@@ -3,8 +3,8 @@ import { COURSES } from './courses';
 import { SCHOOLS } from './schools';
 
 describe('COURSES', () => {
-  it('tem 54 cursos', () => {
-    expect(COURSES).toHaveLength(54);
+  it('tem 58 cursos (catálogo estendido)', () => {
+    expect(COURSES).toHaveLength(58);
   });
   it('ids são únicos', () => {
     const ids = COURSES.map((c) => c.id);
@@ -17,9 +17,9 @@ describe('COURSES', () => {
   });
   it('contagem por escola bate com a curadoria', () => {
     const count = (id: string) => COURSES.filter((c) => c.schoolId === id).length;
-    expect(count('politecnica')).toBe(18);
+    expect(count('politecnica')).toBe(21);
     expect(count('artes')).toBe(15);
-    expect(count('gestao')).toBe(11);
+    expect(count('gestao')).toBe(12);
     expect(count('saude')).toBe(8);
     expect(count('direito')).toBe(1);
     expect(count('direito-ri')).toBe(1);

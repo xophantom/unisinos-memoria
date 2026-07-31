@@ -2,7 +2,7 @@ import {
   // Politécnica
   Code2, DraftingCompass, Dna, Cpu, Construction, CircuitBoard, Bot, Factory,
   Zap, Wrench, FlaskConical, Boxes, Network, BrainCircuit, Sigma, ShieldCheck,
-  Database, Globe,
+  Database, Globe, Rocket, Sprout, Braces, PencilRuler,
   // Artes, Humanidades e Economia Criativa
   Palette, PenTool, Lightbulb, ChefHat, ScrollText, Gamepad2, Newspaper, BookOpen,
   Shirt, Backpack, Video, Music, Megaphone, Clapperboard, Users,
@@ -85,4 +85,9 @@ export const COURSES: Course[] = [
   { id: 'direito', label: 'Direito', schoolId: 'direito', Icon: Scale },
   // Direito e Relações Internacionais (1)
   { id: 'relacoes-internacionais', label: 'Relações Internacionais', schoolId: 'direito-ri', Icon: Earth },
+  // Cursos novos (clusterização por propósito)
+  { id: 'eng-software', label: 'Engenharia de Software', schoolId: 'politecnica', Icon: Braces },
+  { id: 'design-engineering', label: 'Design Engineering', schoolId: 'politecnica', Icon: PencilRuler },
+  { id: 'agrotecnologia', label: 'Agrotecnologia', schoolId: 'politecnica', Icon: Sprout },
+  { id: 'gil', label: 'Gestão para Inovação e Liderança', schoolId: 'gestao', Icon: Rocket },
 ];

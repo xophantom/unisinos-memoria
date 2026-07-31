@@ -5,11 +5,12 @@ import type { BoardCard } from '../lib/gameReducer';
 
 interface Props {
   cards: BoardCard[];
+  gradient: string;
   locked: boolean;
   onFlip: (id: number) => void;
 }
 
-export default function Board({ cards, locked, onFlip }: Props) {
+export default function Board({ cards, gradient, locked, onFlip }: Props) {
   return (
     <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-3 w-full">
       {cards.map((c) => (
@@ -17,6 +18,7 @@ export default function Board({ cards, locked, onFlip }: Props) {
           key={c.id}
           id={c.id}
           course={c.course}
+          gradient={gradient}
           isFlipped={c.isFlipped}
           isMatched={c.isMatched}
           locked={locked}

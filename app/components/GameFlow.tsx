@@ -3,18 +3,17 @@
 import { useState } from 'react';
 import Header from './Header';
 import Quiz from './Quiz';
-import AreaReveal from './AreaReveal';
+import ClusterReveal from './ClusterReveal';
 import GameBoard from './GameBoard';
-import { resolveArea, type Q1Id, type Q2Id } from '../data/quiz';
-import { AREAS } from '../data/areas';
+import { CLUSTERS, type ClusterId, type LaneId } from '../data/clusters';
 
 type Phase = 'quiz' | 'reveal' | 'game';
 
 export default function GameFlow() {
   const [phase, setPhase] = useState<Phase>('quiz');
-  const [answers, setAnswers] = useState<{ p1: Q1Id; p2: Q2Id } | null>(null);
+  const [answers, setAnswers] = useState<{ clusterId: ClusterId; laneId: LaneId } | null>(null);
 
-  const area = answers ? AREAS[resolveArea(answers.p1, answers.p2)] : null;
+  const cluster = answers ? CLUSTERS[answers.clusterId] : null;
 
   const restartQuiz = () => {
     setAnswers(null);
@@ -27,18 +26,20 @@ export default function GameFlow() {
 
       {phase === 'quiz' && (
         <Quiz
-          onComplete={(p1, p2) => {
-            setAnswers({ p1, p2 });
+          onComplete={(clusterId, laneId) => {
+            setAnswers({ clusterId, laneId });
             setPhase('reveal');
           }}
         />
       )}
 
-      {phase === 'reveal' && area && answers && (
-        <AreaReveal area={area} p1={answers.p1} p2={answers.p2} onStart={() => setPhase('game')} />
+      {phase === 'reveal' && cluster && answers && (
+        <ClusterReveal cluster={cluster} laneId={answers.laneId} onStart={() => setPhase('game')} />
       )}
 
-      {phase === 'game' && area && <GameBoard area={area} onRestartQuiz={restartQuiz} />}
+      {phase === 'game' && cluster && answers && (
+        <GameBoard cluster={cluster} laneId={answers.laneId} onRestartQuiz={restartQuiz} />
+      )}
     </div>
   );
 }

@@ -2,19 +2,19 @@
 
 import { useEffect, useRef } from 'react';
 import { Trophy, Star } from 'lucide-react';
-import type { School } from '../data/schools';
+import type { Course } from '../data/courses';
 import { formatTime } from '../lib/format';
 
 interface Props {
   moves: number;
   time: number;
   stars: 1 | 2 | 3;
-  schools: School[];
+  courses: Course[];
   onRestart: () => void;
   onRestartQuiz: () => void;
 }
 
-export default function VictoryModal({ moves, time, stars, schools, onRestart, onRestartQuiz }: Props) {
+export default function VictoryModal({ moves, time, stars, courses, onRestart, onRestartQuiz }: Props) {
   const restartRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -46,15 +46,20 @@ export default function VictoryModal({ moves, time, stars, schools, onRestart, o
         <p className="text-neutral-600">
           Concluído em <strong>{moves} jogadas</strong> · <strong>{formatTime(time)}</strong>
         </p>
-        <div className="flex flex-wrap justify-center gap-1.5 my-4">
-          {schools.map((s) => (
-            <span
-              key={s.id}
-              className={`text-xs font-semibold text-white px-2 py-1 rounded-full bg-gradient-to-br ${s.gradient}`}
-            >
-              {s.short}
-            </span>
-          ))}
+        <p className="mt-4 mb-2 text-sm font-semibold text-neutral-500">Cursos que você encontrou</p>
+        <div className="flex flex-wrap justify-center gap-1.5 mb-4">
+          {courses.map((c) => {
+            const Icon = c.Icon;
+            return (
+              <span
+                key={c.id}
+                className="flex items-center gap-1 text-xs font-semibold text-neutral-700 bg-neutral-100 px-2 py-1 rounded-full"
+              >
+                <Icon className="w-3.5 h-3.5" aria-hidden />
+                {c.label}
+              </span>
+            );
+          })}
         </div>
         <div className="mt-2 flex flex-col gap-2">
           <button

@@ -7,17 +7,13 @@ describe('GameFlow', () => {
   it('quiz → reveal → game', async () => {
     render(<GameFlow />);
 
-    // Quiz (pergunta 1)
-    expect(screen.getByText('O que mais desperta sua curiosidade?')).toBeInTheDocument();
-    await userEvent.click(screen.getByRole('button', { name: /Computadores, tecnologia e inovação/ }));
-    // Pergunta 2
-    await userEvent.click(screen.getByRole('button', { name: /Construir apps, máquinas ou sistemas/ }));
+    expect(screen.getByText('Qual desses combina mais com você?')).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: /Criar, projetar e manusear/ }));
+    await userEvent.click(screen.getByRole('button', { name: /Engenharia e construção/ }));
 
-    // Reveal
-    expect(screen.getByText('Tecnologia e Engenharia')).toBeInTheDocument();
+    expect(screen.getByText('Criar, projetar e manusear')).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Começar a jogar' }));
 
-    // Game
     expect(await screen.findByRole('button', { name: 'Refazer o teste' })).toBeInTheDocument();
   });
 });

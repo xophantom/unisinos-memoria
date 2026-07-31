@@ -5,32 +5,33 @@ import Scoreboard from './Scoreboard';
 import Board from './Board';
 import VictoryModal from './VictoryModal';
 import { useMemoryGame } from '../hooks/useMemoryGame';
-import { PAIRS_PER_GAME, type Area } from '../data/areas';
+import { PAIRS_PER_GAME, type Cluster, type LaneId } from '../data/clusters';
 import { calcStars } from '../lib/scoring';
-import { getSchool, type SchoolId } from '../data/schools';
+import type { Course } from '../data/courses';
 
 interface Props {
-  area: Area;
+  cluster: Cluster;
+  laneId: LaneId;
   onRestartQuiz: () => void;
 }
 
-export default function GameBoard({ area, onRestartQuiz }: Props) {
-  const { state, time, records, flip, restart } = useMemoryGame(area);
+export default function GameBoard({ cluster, laneId, onRestartQuiz }: Props) {
+  const { state, time, records, flip, restart } = useMemoryGame(cluster, laneId);
 
   const locked = state.phase !== 'playing';
-  const best = records ? records[area.id] : null;
+  const best = records ? records[cluster.id] : null;
   const won = state.phase === 'won';
   const stars = calcStars(state.moves, PAIRS_PER_GAME);
-  const schoolsInGame = won
-    ? Array.from(new Set(state.cards.map((c) => c.course.schoolId))).map((id: SchoolId) => getSchool(id))
+  const coursesInGame: Course[] = won
+    ? Array.from(new Map(state.cards.map((c) => [c.course.id, c.course])).values())
     : [];
 
   return (
     <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto">
       <div className="contents" inert={won || undefined}>
         <div className="flex items-center gap-2 text-sm font-semibold text-neutral-500">
-          <span className="text-lg" aria-hidden>{area.emoji}</span>
-          {area.label}
+          <span className="text-lg" aria-hidden>{cluster.emoji}</span>
+          {cluster.label}
         </div>
 
         <Scoreboard
@@ -42,7 +43,7 @@ export default function GameBoard({ area, onRestartQuiz }: Props) {
         />
 
         {state.cards.length > 0 ? (
-          <Board cards={state.cards} locked={locked} onFlip={flip} />
+          <Board cards={state.cards} gradient={cluster.accent} locked={locked} onFlip={flip} />
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 w-full">
             {Array.from({ length: PAIRS_PER_GAME * 2 }).map((_, i) => (
@@ -75,7 +76,7 @@ export default function GameBoard({ area, onRestartQuiz }: Props) {
           moves={state.moves}
           time={time}
           stars={stars}
-          schools={schoolsInGame}
+          courses={coursesInGame}
           onRestart={restart}
           onRestartQuiz={onRestartQuiz}
         />

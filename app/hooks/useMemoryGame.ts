@@ -4,14 +4,14 @@
 import { useReducer, useEffect, useState, useCallback, useRef } from 'react';
 import { gameReducer, initialState, type GameState } from '../lib/gameReducer';
 import { buildDeck } from '../lib/deck';
-import { getAreaCourses, PAIRS_PER_GAME, type Area } from '../data/areas';
+import { selectGameCourses, PAIRS_PER_GAME, type Cluster, type LaneId } from '../data/clusters';
 import { saveResult, loadRecords, type Records } from '../lib/storage';
 
 const PEEK_MS = 2500;
 const MATCH_MS = 500;
 const MISMATCH_MS = 1000;
 
-export function useMemoryGame(area: Area): {
+export function useMemoryGame(cluster: Cluster, laneId: LaneId): {
   state: GameState;
   time: number;
   records: Records | null;
@@ -27,20 +27,20 @@ export function useMemoryGame(area: Area): {
     setRecords(loadRecords());
   }, []);
 
-  const newGame = useCallback((a: Area) => {
+  const newGame = useCallback((c: Cluster, lane: LaneId) => {
     savedRef.current = false;
     setTime(0);
     dispatch({
       type: 'NEW_GAME',
-      cards: buildDeck(PAIRS_PER_GAME, getAreaCourses(a.id)),
+      cards: buildDeck(PAIRS_PER_GAME, selectGameCourses(c, lane)),
       totalPairs: PAIRS_PER_GAME,
     });
   }, []);
 
-  // (re)inicia ao trocar de área e na montagem
+  // (re)inicia ao trocar cluster/caminho e na montagem
   useEffect(() => {
-    newGame(area);
-  }, [area, newGame]);
+    newGame(cluster, laneId);
+  }, [cluster, laneId, newGame]);
 
   // fim da espiada — reinicia a cada novo jogo (state.gameId muda)
   useEffect(() => {
@@ -69,16 +69,16 @@ export function useMemoryGame(area: Area): {
     return () => clearInterval(iv);
   }, [isTicking]);
 
-  // persiste recorde da área ao vencer (uma vez)
+  // persiste recorde do cluster ao vencer (uma vez)
   useEffect(() => {
     if (state.phase === 'won' && !savedRef.current) {
       savedRef.current = true;
-      setRecords(saveResult(area.id, { moves: state.moves, time }));
+      setRecords(saveResult(cluster.id, { moves: state.moves, time }));
     }
-  }, [state.phase, area.id, state.moves, time]);
+  }, [state.phase, cluster.id, state.moves, time]);
 
   const flip = useCallback((id: number) => dispatch({ type: 'FLIP', id }), []);
-  const restart = useCallback(() => newGame(area), [newGame, area]);
+  const restart = useCallback(() => newGame(cluster, laneId), [newGame, cluster, laneId]);
 
   return { state, time, records, flip, restart };
 }

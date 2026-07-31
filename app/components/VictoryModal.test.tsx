@@ -2,13 +2,16 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import VictoryModal from './VictoryModal';
-import { SCHOOLS } from '../data/schools';
+import { COURSES } from '../data/courses';
+
+const medicina = COURSES.find((c) => c.id === 'medicina')!;
+const enfermagem = COURSES.find((c) => c.id === 'enfermagem')!;
 
 const base = {
   moves: 9,
   time: 75,
   stars: 3 as const,
-  schools: [SCHOOLS.saude],
+  courses: [medicina, enfermagem],
   onRestart: () => {},
   onRestartQuiz: () => {},
 };
@@ -23,10 +26,11 @@ describe('VictoryModal', () => {
     render(<VictoryModal {...base} stars={2} />);
     expect(screen.getByLabelText('2 de 3 estrelas')).toBeInTheDocument();
   });
-  it('mostra as escolas que apareceram', () => {
-    render(<VictoryModal {...base} schools={[SCHOOLS.saude, SCHOOLS.politecnica]} />);
-    expect(screen.getByText('Saúde')).toBeInTheDocument();
-    expect(screen.getByText('Politécnica')).toBeInTheDocument();
+  it('lista os cursos encontrados', () => {
+    render(<VictoryModal {...base} />);
+    expect(screen.getByText('Cursos que você encontrou')).toBeInTheDocument();
+    expect(screen.getByText('Medicina')).toBeInTheDocument();
+    expect(screen.getByText('Enfermagem')).toBeInTheDocument();
   });
   it('chama onRestart no botão "Jogar de novo"', async () => {
     const onRestart = vi.fn();

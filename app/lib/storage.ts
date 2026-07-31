@@ -1,4 +1,4 @@
-import type { ClusterId } from '../data/clusters';
+import { CLUSTER_IDS, type ClusterId } from '../data/clusters';
 
 export interface BestScore {
   bestMoves: number | null;
@@ -7,7 +7,6 @@ export interface BestScore {
 export type Records = Record<ClusterId, BestScore>;
 
 const KEY = 'unisinos-memoria-records-clusters';
-const CLUSTER_IDS: ClusterId[] = ['saber', 'cuidar', 'criar', 'analisar', 'liderar', 'desenvolver'];
 
 export function emptyRecords(): Records {
   return CLUSTER_IDS.reduce((acc, id) => {

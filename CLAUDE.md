@@ -7,57 +7,62 @@ lúdica que envolve o público com o universo acadêmico da universidade.
 
 ## Aplicação
 
-Antes de jogar, um **mini teste vocacional** de 2 perguntas define uma **área**.
-O jogo então mostra um memória clássico de **6 pares** com cursos daquela área —
-achar pares do mesmo curso, cada carta pintada pela **cor da Escola**.
+Antes de jogar, um **mini teste vocacional** de 2 perguntas define um **cluster**
+(a Unisinos organiza a oferta por *clusterização por propósito*). O jogo então
+mostra um memória clássico de **6 pares** com cursos daquele cluster — achar pares
+do mesmo curso, cada carta pintada pela **cor do cluster**.
 
 Fluxo:
-1. **Pergunta 1** (curiosidade) e **Pergunta 2** (atividade preferida).
-2. As respostas resolvem uma das **5 áreas** (`resolveArea`): a P1 dá a área ampla
-   e a P2 refina o caso "Ciências".
-3. Tela de **resultado** ("Você tem tudo a ver com [Área]!") → botão Começar.
+1. **Pergunta 1:** "Qual desses combina mais com você?" → as **6 opções são os
+   clusters** (nome + tagline).
+2. **Pergunta 2:** "Dentro de [Cluster], você é mais…" → **2 caminhos** do cluster;
+   o baralho é puxado do caminho escolhido (afunilamento para os cursos).
+3. Tela de **resultado** ("Você tem tudo a ver com [Cluster]! · lado [Caminho]") →
+   botão Começar.
 4. **Jogo:** espiada inicial ~2,5s, depois vira 2 cartas por vez procurando o par.
-5. **Vitória:** estrelas, jogadas, tempo e Escolas que apareceram; botões
-   **Jogar de novo** (mesma área) e **Refazer o teste** (volta às perguntas).
+5. **Vitória:** estrelas, jogadas, tempo e os **cursos que apareceram**; botões
+   **Jogar de novo** (mesmo cluster+caminho) e **Refazer o teste** (volta às perguntas).
 
 ## Funcionalidades
 
 - **Mini teste vocacional** (2 perguntas) como porta de entrada.
-- **5 áreas** que filtram os cursos (pools em `app/data/areas.ts`):
-  Tecnologia e Engenharia, Saúde e Bem-estar, Negócios/Gestão/Direito,
-  Comunicação/Artes/Humanidades, Ciências e Meio Ambiente (cross-escola).
-- **6 pares temáticos** por partida (sem tiers de dificuldade), sorteados do pool da área.
+- **6 clusters** que filtram os cursos (pools em `app/data/clusters.ts`):
+  Saber/aprender/ensinar, Cuidar/nutrir/pesquisar, Criar/projetar/manusear,
+  Analisar/comunicar/gerir, Liderar/empreender/inovar, Desenvolver/programar/sistematizar.
+- **2 caminhos por cluster** (P2) que priorizam um subconjunto dos cursos.
+- **6 pares** por partida (sem tiers de dificuldade), sorteados do caminho.
 - **Espiada inicial** ~2,5s; **flip 3D** (respeita "reduzir movimento").
 - **Placar em tempo real:** jogadas, pares, cronômetro.
-- **Recordes persistentes por área** (localStorage): melhor nº de jogadas e menor tempo.
+- **Recordes persistentes por cluster** (localStorage): melhor nº de jogadas e menor tempo.
 - **Estrelas (1–3)** por eficiência na tela de vitória.
 - **Acessibilidade:** cartas e opções são botões (teclado + aria), modal com foco/Escape
   e fundo `inert`, região `aria-live`, layout responsivo.
 
-## Cursos e Escolas
+## Cursos e clusters
 
-Fonte da lista: `docs/cursos.md`. Curadoria aplicada: as 3 variantes de
-"Administração" viram uma só e "Comércio Exterior" duplicado é mantido uma vez →
-**54 cursos** em **6 Escolas**:
+Fonte: clusterização oficial da Unisinos ("Os cursos em cada cluster"). Curadoria:
+catálogo de **49 cursos** (`app/data/courses.ts`), sem camada de Escola — a cor vem
+do cluster. Um curso pode aparecer em dois clusters (ex.: Administração e Comércio
+Exterior também compõem "Liderar" para fechar 6 pares).
 
-| Escola | id | Cor | Nº cursos |
-|---|---|---|---|
-| Politécnica | `politecnica` | Azul | 18 |
-| Artes, Humanidades e Economia Criativa | `artes` | Fúcsia/Violeta | 15 |
-| Gestão e Negócios | `gestao` | Âmbar | 11 |
-| Saúde | `saude` | Esmeralda | 8 |
-| Direito | `direito` | Índigo | 1 |
-| Direito e Relações Internacionais | `direito-ri` | Teal | 1 |
+| Cluster | id | Cor | Nº cursos | Caminhos (P2) |
+|---|---|---|---|---|
+| Saber, aprender e ensinar | `saber` | Índigo | 6 | Gente/ideias/palavras · Lógica/natureza |
+| Cuidar, nutrir e pesquisar | `cuidar` | Esmeralda | 9 | Perto do paciente · Nutrição/ciência/lab |
+| Criar, projetar e manusear | `criar` | Fúcsia/Violeta | 13 | Arte/mídia/design · Engenharia/construção |
+| Analisar, comunicar e gerir | `analisar` | Azul | 9 | Comunicar/influenciar · Números/gerir |
+| Liderar, empreender e inovar | `liderar` | Âmbar | 6 | Empreender/inovar · Direito/global |
+| Desenvolver, programar e sistematizar | `desenvolver` | Ciano/Teal | 8 | Apps/jogos/IA · Sistemas/dados/segurança |
 
 O vermelho carmim (`#C8102E`) é reservado à **marca Unisinos** (header, botões,
-carta fechada) — nenhuma Escola usa vermelho.
+carta fechada) — nenhum cluster usa vermelho.
 
 ## Identidade visual
 
 - Fundo claro institucional (`--color-surface`), acento **carmim `#C8102E`**.
 - Header textual "**UNISINOS** · Start" (placeholder do logo oficial — trocar
   quando o arquivo estiver disponível).
-- Cartas: frente carmim com "?"; verso com gradiente da Escola + ícone + nome.
+- Cartas: frente carmim com "?"; verso com gradiente do cluster + ícone + nome.
 
 ## Tecnologias
 
@@ -66,20 +71,22 @@ Next.js 16, React 19, Tailwind CSS 4, lucide-react. Testes com Vitest +
 
 ## Arquitetura
 
-- `app/data/schools.ts` — as 6 Escolas (cor/ícone).
-- `app/data/courses.ts` — os 54 cursos (`id`, `label`, `schoolId`, `Icon`).
-- `app/data/areas.ts` — as 5 áreas (label, emoji, cor, pool de `courseIds`) + `PAIRS_PER_GAME`.
-- `app/data/quiz.ts` — as 2 perguntas e `resolveArea(p1, p2)` (pura).
+- `app/data/courses.ts` — os 49 cursos (`id`, `label`, `Icon`).
+- `app/data/clusters.ts` — os 6 clusters (label, tagline, emoji, cor, `courseIds`,
+  2 `lanes`) + `PAIRS_PER_GAME`, `getClusterCourses`, `selectGameCourses`.
+- `app/data/quiz.ts` — `QUESTION_1` (escolhe o cluster) e `getQuestion2(clusterId)`
+  (os 2 caminhos).
 - `app/lib/deck.ts` — embaralhamento e montagem do baralho.
 - `app/lib/gameReducer.ts` — **reducer puro** com a máquina de estados
-  (peek → playing → checking → won). Toda a lógica de jogo, testável sem React.
-- `app/hooks/useMemoryGame.ts` — recebe a **área** (pool de cursos, 6 pares fixos)
-  e orquestra reducer + timers (espiada, resolução, cronômetro) + recordes por área.
-- `app/lib/scoring.ts` (estrelas), `app/lib/storage.ts` — recordes por `AreaId`
-  (chave `unisinos-memoria-records-areas`, localStorage, SSR-safe), `app/lib/format.ts` (mm:ss).
-- `app/components/` — `Quiz.tsx` (as 2 perguntas), `AreaReveal.tsx` (tela de
-  resultado), `GameFlow.tsx` (máquina de fluxo `quiz → reveal → game`),
-  `Header`, `Scoreboard`, `Board`, `Card`, `VictoryModal`; `GameBoard` compõe o jogo.
+  (peek → playing → checking → won). Testável sem React.
+- `app/hooks/useMemoryGame.ts` — recebe **cluster + caminho** (6 pares) e orquestra
+  reducer + timers (espiada, resolução, cronômetro) + recordes por cluster.
+- `app/lib/scoring.ts` (estrelas), `app/lib/storage.ts` — recordes por `ClusterId`
+  (chave `unisinos-memoria-records-clusters`, localStorage, SSR-safe),
+  `app/lib/format.ts` (mm:ss).
+- `app/components/` — `Quiz.tsx` (P1 cluster → P2 caminho), `ClusterReveal.tsx`
+  (resultado), `GameFlow.tsx` (fluxo `quiz → reveal → game`), `Header`, `Scoreboard`,
+  `Board`, `Card`, `VictoryModal`; `GameBoard` compõe o jogo.
 
 ## Comandos
 
@@ -92,4 +99,5 @@ Next.js 16, React 19, Tailwind CSS 4, lucide-react. Testes com Vitest +
 - Textos de UI em **PT-BR com acentuação correta**.
 - Somente imports relativos no código (sem alias `@/`) para o Vitest resolver
   sem configuração extra.
-- Lógica de jogo nova entra no reducer (com teste) antes da UI.
+- Lógica de jogo nova entra no reducer/dados (com teste) antes da UI.
+- "Escola"/"área de interesse" não são usados — o vocabulário é **cluster**.

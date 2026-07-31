@@ -8,7 +8,7 @@ export default function Header() {
       <h1 className="mt-2 text-3xl sm:text-4xl font-extrabold text-neutral-900">
         Jogo da Memória dos Cursos
       </h1>
-      <p className="text-neutral-500">Encontre os pares e descubra as Escolas da Unisinos</p>
+      <p className="text-neutral-500">Encontre os pares e descubra o cluster que combina com você</p>
     </header>
   );
 }

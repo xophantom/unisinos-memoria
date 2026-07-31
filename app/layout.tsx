@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Jogo da Memória — Unisinos Start",
-  description: "Encontre os pares de cursos e descubra as Escolas da Unisinos.",
+  description: "Encontre os pares de cursos e descubra o cluster que combina com você.",
 };
 
 export default function RootLayout({

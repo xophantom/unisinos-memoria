@@ -4,27 +4,28 @@ export interface QuizOption<T> {
   id: T;
   label: string;
   emoji: string;
-  sublabel?: string;
 }
 export interface Question<T> {
   prompt: string;
   options: QuizOption<T>[];
 }
 
+// P1: o aluno escolhe a missão; o nome do cluster só aparece no resultado.
 export const QUESTION_1: Question<ClusterId> = {
-  prompt: 'Qual desses combina mais com você?',
+  prompt: 'Você tem uma missão para o seu futuro. Qual será?',
   options: CLUSTER_IDS.map((id) => ({
     id,
-    label: CLUSTERS[id].label,
+    label: CLUSTERS[id].mission,
     emoji: CLUSTERS[id].emoji,
-    sublabel: CLUSTERS[id].tagline,
   })),
 };
 
-export function getQuestion2(clusterId: ClusterId): Question<LaneId> {
+// P2: só existe no cluster "criar" (2 caminhos). Nos demais, devolve null.
+export function getQuestion2(clusterId: ClusterId): Question<LaneId> | null {
   const cluster = CLUSTERS[clusterId];
+  if (!cluster.lanes) return null;
   return {
-    prompt: `Dentro de "${cluster.label}", você é mais...`,
+    prompt: 'Você se identifica mais com:',
     options: cluster.lanes.map((l) => ({ id: l.id, label: l.label, emoji: l.emoji })),
   };
 }

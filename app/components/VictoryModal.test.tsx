@@ -28,7 +28,7 @@ describe('VictoryModal', () => {
   });
   it('lista os cursos encontrados', () => {
     render(<VictoryModal {...base} />);
-    expect(screen.getByText('Cursos que você encontrou')).toBeInTheDocument();
+    expect(screen.getByText('Nos vemos na Unisinos em:')).toBeInTheDocument();
     expect(screen.getByText('Medicina')).toBeInTheDocument();
     expect(screen.getByText('Enfermagem')).toBeInTheDocument();
   });

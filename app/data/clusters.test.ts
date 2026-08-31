@@ -1,80 +1,69 @@
 import { describe, it, expect } from 'vitest';
-import { CLUSTERS, CLUSTER_IDS, getClusterCourses, selectGameCourses, PAIRS_PER_GAME } from './clusters';
+import { CLUSTERS, CLUSTER_IDS, getClusterCourses, getGameCourses } from './clusters';
 import { COURSES } from './courses';
-
-const identity = <T,>(a: T[]): T[] => a;
 
 describe('CLUSTERS', () => {
   it('tem os 6 clusters', () => {
     expect(Object.keys(CLUSTERS).sort()).toEqual([...CLUSTER_IDS].sort());
   });
-  it('PAIRS_PER_GAME é 6', () => {
-    expect(PAIRS_PER_GAME).toBe(6);
-  });
-  it('cada cluster tem label, tagline, emoji, accent sem vermelho e 2 caminhos', () => {
+  it('cada cluster tem label, mission, tagline, emoji e accent sem vermelho', () => {
     for (const id of CLUSTER_IDS) {
       const c = CLUSTERS[id];
       expect(c.label).toBeTruthy();
+      expect(c.mission).toBeTruthy();
       expect(c.tagline).toBeTruthy();
       expect(c.emoji).toBeTruthy();
       expect(c.accent).toMatch(/from-/);
       expect(c.accent).not.toMatch(/red|rose|unisinos/);
-      expect(c.lanes).toHaveLength(2);
     }
   });
-  it('todo courseId de cluster e de caminho existe em COURSES', () => {
+  it('todo courseId de cluster existe em COURSES', () => {
     const valid = new Set(COURSES.map((c) => c.id));
     for (const id of CLUSTER_IDS) {
       for (const cid of CLUSTERS[id].courseIds) {
         expect(valid.has(cid), `curso inexistente "${cid}" no cluster "${id}"`).toBe(true);
       }
-      for (const lane of CLUSTERS[id].lanes) {
-        expect(lane.courseIds.length).toBeGreaterThan(0);
-        for (const cid of lane.courseIds) {
-          expect(valid.has(cid), `curso inexistente "${cid}" no caminho "${lane.id}"`).toBe(true);
-        }
+    }
+  });
+  it('só o cluster "criar" tem P2 (2 caminhos); os demais não', () => {
+    for (const id of CLUSTER_IDS) {
+      if (id === 'criar') {
+        expect(CLUSTERS[id].lanes).toHaveLength(2);
+      } else {
+        expect(CLUSTERS[id].lanes).toBeUndefined();
       }
     }
   });
-  it('a união dos 2 caminhos é igual ao courseIds do cluster', () => {
-    for (const id of CLUSTER_IDS) {
-      const c = CLUSTERS[id];
-      const union = [...c.lanes[0].courseIds, ...c.lanes[1].courseIds].sort();
-      expect(union).toEqual([...c.courseIds].sort());
-    }
+  it('no "criar", a união dos 2 caminhos é igual ao courseIds', () => {
+    const c = CLUSTERS.criar;
+    const union = [...c.lanes![0].courseIds, ...c.lanes![1].courseIds].sort();
+    expect(union).toEqual([...c.courseIds].sort());
   });
-  it('cada cluster tem ao menos 6 cursos', () => {
-    for (const id of CLUSTER_IDS) {
-      expect(getClusterCourses(id).length).toBe(CLUSTERS[id].courseIds.length);
-      expect(getClusterCourses(id).length).toBeGreaterThanOrEqual(PAIRS_PER_GAME);
-    }
+  it('contagem de cursos por cluster (tabuleiro variável)', () => {
+    expect(getClusterCourses('saber')).toHaveLength(6);
+    expect(getClusterCourses('cuidar')).toHaveLength(9);
+    expect(getClusterCourses('criar')).toHaveLength(13);
+    expect(getClusterCourses('analisar')).toHaveLength(9);
+    expect(getClusterCourses('liderar')).toHaveLength(4);
+    expect(getClusterCourses('desenvolver')).toHaveLength(8);
   });
 });
 
-describe('selectGameCourses', () => {
-  it('devolve exatamente 6 cursos para qualquer caminho', () => {
-    for (const id of CLUSTER_IDS) {
-      for (const lane of CLUSTERS[id].lanes) {
-        expect(selectGameCourses(CLUSTERS[id], lane.id, identity)).toHaveLength(PAIRS_PER_GAME);
-      }
-    }
+describe('getGameCourses', () => {
+  it('nos clusters sem P2, usa todos os cursos do cluster', () => {
+    expect(getGameCourses(CLUSTERS.liderar)).toHaveLength(4);
+    expect(getGameCourses(CLUSTERS.cuidar)).toHaveLength(9);
   });
-  it('prioriza os cursos do caminho quando o caminho tem >= 6', () => {
-    const eng = CLUSTERS.criar.lanes.find((l) => l.id === 'engenharia')!;
-    const selected = selectGameCourses(CLUSTERS.criar, 'engenharia', identity).map((c) => c.id);
-    for (const cid of selected) {
-      expect(eng.courseIds).toContain(cid);
-    }
+  it('no "criar", usa os cursos do lado escolhido', () => {
+    expect(getGameCourses(CLUSTERS.criar, 'engenharias')).toHaveLength(6);
+    expect(getGameCourses(CLUSTERS.criar, 'criatividade')).toHaveLength(7);
   });
-  it('completa com o resto do cluster quando o caminho tem < 6', () => {
-    const selected = selectGameCourses(CLUSTERS.saber, 'exatas', identity).map((c) => c.id);
-    expect(selected).toHaveLength(6);
-    expect(selected).toContain('matematica');
-    expect(selected).toContain('biologia');
+  it('no "criar" sem lado, usa o cluster inteiro (fallback)', () => {
+    expect(getGameCourses(CLUSTERS.criar)).toHaveLength(13);
   });
   it('todos os ids retornados existem em COURSES', () => {
     const valid = new Set(COURSES.map((c) => c.id));
-    for (const c of selectGameCourses(CLUSTERS.desenvolver, 'software', identity)) {
+    for (const c of getGameCourses(CLUSTERS.criar, 'criatividade')) {
       expect(valid.has(c.id)).toBe(true);
     }
   });

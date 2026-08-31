@@ -4,14 +4,14 @@
 import { useReducer, useEffect, useState, useCallback, useRef } from 'react';
 import { gameReducer, initialState, type GameState } from '../lib/gameReducer';
 import { buildDeck } from '../lib/deck';
-import { selectGameCourses, PAIRS_PER_GAME, type Cluster, type LaneId } from '../data/clusters';
+import { getGameCourses, type Cluster, type LaneId } from '../data/clusters';
 import { saveResult, loadRecords, type Records } from '../lib/storage';
 
 const PEEK_MS = 2500;
 const MATCH_MS = 500;
 const MISMATCH_MS = 1000;
 
-export function useMemoryGame(cluster: Cluster, laneId: LaneId): {
+export function useMemoryGame(cluster: Cluster, laneId?: LaneId): {
   state: GameState;
   time: number;
   records: Records | null;
@@ -27,13 +27,14 @@ export function useMemoryGame(cluster: Cluster, laneId: LaneId): {
     setRecords(loadRecords());
   }, []);
 
-  const newGame = useCallback((c: Cluster, lane: LaneId) => {
+  const newGame = useCallback((c: Cluster, lane?: LaneId) => {
     savedRef.current = false;
     setTime(0);
+    const courses = getGameCourses(c, lane);
     dispatch({
       type: 'NEW_GAME',
-      cards: buildDeck(PAIRS_PER_GAME, selectGameCourses(c, lane)),
-      totalPairs: PAIRS_PER_GAME,
+      cards: buildDeck(courses.length, courses),
+      totalPairs: courses.length,
     });
   }, []);
 

@@ -46,7 +46,7 @@ export default function VictoryModal({ moves, time, stars, courses, onRestart, o
         <p className="text-neutral-600">
           Concluído em <strong>{moves} jogadas</strong> · <strong>{formatTime(time)}</strong>
         </p>
-        <p className="mt-4 mb-2 text-sm font-semibold text-neutral-500">Cursos que você encontrou</p>
+        <p className="mt-4 mb-2 text-sm font-semibold text-neutral-500">Nos vemos na Unisinos em:</p>
         <div className="flex flex-wrap justify-center gap-1.5 mb-4">
           {courses.map((c) => {
             const Icon = c.Icon;

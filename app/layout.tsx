@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jogo da Memória — Unisinos Start",
-  description: "Encontre os pares de cursos e descubra o cluster que combina com você.",
+  title: "Play no Futuro — Unisinos Conecta",
+  description: "Descubra seu próximo passo na Unisinos.",
 };
 
 export default function RootLayout({

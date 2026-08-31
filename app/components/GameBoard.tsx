@@ -5,13 +5,13 @@ import Scoreboard from './Scoreboard';
 import Board from './Board';
 import VictoryModal from './VictoryModal';
 import { useMemoryGame } from '../hooks/useMemoryGame';
-import { PAIRS_PER_GAME, type Cluster, type LaneId } from '../data/clusters';
+import { type Cluster, type LaneId } from '../data/clusters';
 import { calcStars } from '../lib/scoring';
 import type { Course } from '../data/courses';
 
 interface Props {
   cluster: Cluster;
-  laneId: LaneId;
+  laneId?: LaneId;
   onRestartQuiz: () => void;
 }
 
@@ -21,7 +21,8 @@ export default function GameBoard({ cluster, laneId, onRestartQuiz }: Props) {
   const locked = state.phase !== 'playing';
   const best = records ? records[cluster.id] : null;
   const won = state.phase === 'won';
-  const stars = calcStars(state.moves, PAIRS_PER_GAME);
+  const totalPairs = state.totalPairs;
+  const stars = calcStars(state.moves, totalPairs || 1);
   const coursesInGame: Course[] = won
     ? Array.from(new Map(state.cards.map((c) => [c.course.id, c.course])).values())
     : [];
@@ -37,7 +38,7 @@ export default function GameBoard({ cluster, laneId, onRestartQuiz }: Props) {
         <Scoreboard
           moves={state.moves}
           matches={state.matches}
-          totalPairs={PAIRS_PER_GAME}
+          totalPairs={totalPairs}
           time={time}
           best={best}
         />
@@ -46,7 +47,7 @@ export default function GameBoard({ cluster, laneId, onRestartQuiz }: Props) {
           <Board cards={state.cards} gradient={cluster.accent} locked={locked} onFlip={flip} />
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 w-full">
-            {Array.from({ length: PAIRS_PER_GAME * 2 }).map((_, i) => (
+            {Array.from({ length: 12 }).map((_, i) => (
               <div key={i} className="aspect-square rounded-xl bg-neutral-200 animate-pulse" />
             ))}
           </div>

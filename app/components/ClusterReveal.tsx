@@ -1,16 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import type { Cluster, LaneId } from '../data/clusters';
+import type { Cluster } from '../data/clusters';
 
 interface Props {
   cluster: Cluster;
-  laneId: LaneId;
   onStart: () => void;
 }
 
-export default function ClusterReveal({ cluster, laneId, onStart }: Props) {
-  const lane = cluster.lanes.find((l) => l.id === laneId);
+export default function ClusterReveal({ cluster, onStart }: Props) {
   const headingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -28,18 +26,13 @@ export default function ClusterReveal({ cluster, laneId, onStart }: Props) {
       >
         {cluster.label}
       </h2>
-      {lane && (
-        <p className="text-neutral-600">
-          E, dentro dele, com o lado <strong>{lane.label}</strong>.
-        </p>
-      )}
-      <p className="text-neutral-600">Bora achar os pares desses cursos?</p>
+      <p className="text-neutral-600">Conheça os cursos perfeitos para o seu futuro!</p>
       <button
         type="button"
         onClick={onStart}
         className="mt-2 bg-unisinos hover:bg-unisinos-dark text-white px-8 py-3 rounded-full font-bold transition-colors"
       >
-        Começar a jogar
+        Jogar
       </button>
     </div>
   );

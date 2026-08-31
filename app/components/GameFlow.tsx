@@ -11,7 +11,7 @@ type Phase = 'quiz' | 'reveal' | 'game';
 
 export default function GameFlow() {
   const [phase, setPhase] = useState<Phase>('quiz');
-  const [answers, setAnswers] = useState<{ clusterId: ClusterId; laneId: LaneId } | null>(null);
+  const [answers, setAnswers] = useState<{ clusterId: ClusterId; laneId?: LaneId } | null>(null);
 
   const cluster = answers ? CLUSTERS[answers.clusterId] : null;
 
@@ -33,8 +33,8 @@ export default function GameFlow() {
         />
       )}
 
-      {phase === 'reveal' && cluster && answers && (
-        <ClusterReveal cluster={cluster} laneId={answers.laneId} onStart={() => setPhase('game')} />
+      {phase === 'reveal' && cluster && (
+        <ClusterReveal cluster={cluster} onStart={() => setPhase('game')} />
       )}
 
       {phase === 'game' && cluster && answers && (

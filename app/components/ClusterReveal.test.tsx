@@ -7,7 +7,7 @@ import { CLUSTERS } from '../data/clusters';
 describe('ClusterReveal', () => {
   it('mostra o nome do cluster e a chamada de cursos', () => {
     render(<ClusterReveal cluster={CLUSTERS.criar} onStart={() => {}} />);
-    expect(screen.getByText('Criar, projetar e manusear')).toBeInTheDocument();
+    expect(screen.getByText('Criar e projetar')).toBeInTheDocument();
     expect(screen.getByText('Conheça os cursos perfeitos para o seu futuro!')).toBeInTheDocument();
   });
   it('chama onStart no botão "Jogar"', async () => {

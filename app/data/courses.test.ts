@@ -14,16 +14,16 @@ describe('COURSES', () => {
     const ids = COURSES.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
-  it('inclui os 4 cursos novos', () => {
+  it('inclui os cursos novos/renomeados (planilha 2027.1)', () => {
     const ids = new Set(COURSES.map((c) => c.id));
-    for (const id of ['gil', 'agrotecnologia', 'eng-software', 'design-engineering']) {
-      expect(ids.has(id), `curso novo ausente: ${id}`).toBe(true);
+    for (const id of ['gil', 'gestao-tec-agro', 'eng-software', 'design-tec-negocios']) {
+      expect(ids.has(id), `curso ausente: ${id}`).toBe(true);
     }
   });
-  it('não inclui os cursos órfãos removidos', () => {
+  it('não inclui ids antigos (renomeados) nem os órfãos removidos', () => {
     const ids = new Set(COURSES.map((c) => c.id));
-    for (const id of REMOVIDOS) {
-      expect(ids.has(id), `curso órfão ainda presente: ${id}`).toBe(false);
+    for (const id of [...REMOVIDOS, 'design-engineering', 'agrotecnologia']) {
+      expect(ids.has(id), `id antigo ainda presente: ${id}`).toBe(false);
     }
   });
   it('todo curso tem id, label e ícone', () => {

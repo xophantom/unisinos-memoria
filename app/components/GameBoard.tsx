@@ -5,18 +5,17 @@ import Scoreboard from './Scoreboard';
 import Board from './Board';
 import VictoryModal from './VictoryModal';
 import { useMemoryGame } from '../hooks/useMemoryGame';
-import { type Cluster, type LaneId } from '../data/clusters';
+import { type Cluster } from '../data/clusters';
 import { calcStars } from '../lib/scoring';
 import type { Course } from '../data/courses';
 
 interface Props {
   cluster: Cluster;
-  laneId?: LaneId;
   onRestartQuiz: () => void;
 }
 
-export default function GameBoard({ cluster, laneId, onRestartQuiz }: Props) {
-  const { state, time, records, flip, restart } = useMemoryGame(cluster, laneId);
+export default function GameBoard({ cluster, onRestartQuiz }: Props) {
+  const { state, time, records, flip, restart } = useMemoryGame(cluster);
 
   const locked = state.phase !== 'playing';
   const best = records ? records[cluster.id] : null;

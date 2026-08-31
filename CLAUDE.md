@@ -1,36 +1,34 @@
-# Jogo da Memória — Unisinos Start
+# Jogo da Memória — Unisinos Conecta (Play no Futuro)
 
 ## Contexto
 
-Atividade prática do evento **Start da Unisinos**: uma aplicação interativa e
-lúdica que envolve o público com o universo acadêmico da universidade.
+Atividade prática do evento **Unisinos Conecta**: uma aplicação interativa e
+lúdica que envolve o público com o universo acadêmico da universidade
+("**Play no Futuro** — descubra seu próximo passo na Unisinos").
 
 ## Aplicação
 
-Antes de jogar, um **mini teste vocacional** de 2 perguntas define um **cluster**
-(a Unisinos organiza a oferta por *clusterização por propósito*). O jogo então
-mostra um memória clássico de **6 pares** com cursos daquele cluster — achar pares
-do mesmo curso, cada carta pintada pela **cor do cluster**.
+Antes de jogar, **uma pergunta** (a "missão") define um **cluster** (a Unisinos
+organiza a oferta por *clusterização por propósito*). O jogo então mostra um
+memória clássico com **todos os cursos daquele cluster** (tabuleiro de tamanho
+variável) — achar pares do mesmo curso, cada carta pintada pela **cor do cluster**.
 
 Fluxo:
-1. **Pergunta 1:** "Qual desses combina mais com você?" → as **6 opções são os
-   clusters** (nome + tagline).
-2. **Pergunta 2:** "Dentro de [Cluster], você é mais…" → **2 caminhos** do cluster;
-   o baralho é puxado do caminho escolhido (afunilamento para os cursos).
-3. Tela de **resultado** ("Você tem tudo a ver com [Cluster]! · lado [Caminho]") →
-   botão Começar.
-4. **Jogo:** espiada inicial ~2,5s, depois vira 2 cartas por vez procurando o par.
-5. **Vitória:** estrelas, jogadas, tempo e os **cursos que apareceram**; botões
-   **Jogar de novo** (mesmo cluster+caminho) e **Refazer o teste** (volta às perguntas).
+1. **Pergunta única (P1):** "Você tem uma missão para o seu futuro. Qual será?" →
+   as **6 opções são as missões** (uma por cluster). O nome do cluster só aparece
+   no resultado.
+2. Tela de **resultado** ("Você tem tudo a ver com [Cluster]! · Conheça os cursos
+   perfeitos para o seu futuro!") → botão **Jogar**.
+3. **Jogo:** espiada inicial ~2,5s, depois vira 2 cartas por vez procurando o par.
+4. **Vitória:** estrelas, jogadas, tempo e os **cursos que apareceram** ("Nos vemos
+   na Unisinos em:"); botões **Jogar de novo** (mesmo cluster) e **Refazer o teste**.
 
 ## Funcionalidades
 
-- **Mini teste vocacional** (2 perguntas) como porta de entrada.
-- **6 clusters** que filtram os cursos (pools em `app/data/clusters.ts`):
-  Saber/aprender/ensinar, Cuidar/nutrir/pesquisar, Criar/projetar/manusear,
-  Analisar/comunicar/gerir, Liderar/empreender/inovar, Desenvolver/programar/sistematizar.
-- **2 caminhos por cluster** (P2) que priorizam um subconjunto dos cursos.
-- **6 pares** por partida (sem tiers de dificuldade), sorteados do caminho.
+- **Pergunta única (missão)** como porta de entrada — sem 2ª pergunta.
+- **6 clusters** que filtram os cursos (pools em `app/data/clusters.ts`).
+- **Tabuleiro de tamanho variável:** nº de pares = nº de cursos do cluster
+  (de 4 a 12 pares). Sem tiers de dificuldade.
 - **Espiada inicial** ~2,5s; **flip 3D** (respeita "reduzir movimento").
 - **Placar em tempo real:** jogadas, pares, cronômetro.
 - **Recordes persistentes por cluster** (localStorage): melhor nº de jogadas e menor tempo.
@@ -40,28 +38,28 @@ Fluxo:
 
 ## Cursos e clusters
 
-Fonte: clusterização oficial da Unisinos ("Os cursos em cada cluster"). Curadoria:
-catálogo de **49 cursos** (`app/data/courses.ts`), sem camada de Escola — a cor vem
-do cluster. Um curso pode aparecer em dois clusters (ex.: Administração e Comércio
-Exterior também compõem "Liderar" para fechar 6 pares).
+Fonte: planilha oficial **CURSOS E CLUSTERS 2027.1** (`docs/`). Curadoria: catálogo
+de **49 cursos** (`app/data/courses.ts`), sem camada de Escola — a cor vem do cluster.
+Cada curso aparece em **exatamente um** cluster (partição limpa: 6+9+9+9+4+12 = 49).
 
-| Cluster | id | Cor | Nº cursos | Caminhos (P2) |
-|---|---|---|---|---|
-| Saber, aprender e ensinar | `saber` | Índigo | 6 | Gente/ideias/palavras · Lógica/natureza |
-| Cuidar, nutrir e pesquisar | `cuidar` | Esmeralda | 9 | Perto do paciente · Nutrição/ciência/lab |
-| Criar, projetar e manusear | `criar` | Fúcsia/Violeta | 13 | Arte/mídia/design · Engenharia/construção |
-| Analisar, comunicar e gerir | `analisar` | Azul | 9 | Comunicar/influenciar · Números/gerir |
-| Liderar, empreender e inovar | `liderar` | Âmbar | 6 | Empreender/inovar · Direito/global |
-| Desenvolver, programar e sistematizar | `desenvolver` | Ciano/Teal | 8 | Apps/jogos/IA · Sistemas/dados/segurança |
+| Cluster | id | Cor | Nº cursos (pares) |
+|---|---|---|---|
+| Aprender e ensinar | `saber` | Índigo | 6 |
+| Cuidar e nutrir | `cuidar` | Esmeralda | 9 |
+| Criar e projetar | `criar` | Fúcsia/Violeta | 9 |
+| Comunicar e gerir | `analisar` | Azul | 9 |
+| Liderar e mediar | `liderar` | Âmbar | 4 |
+| Desenvolver e solucionar | `desenvolver` | Ciano/Teal | 12 |
 
-O vermelho carmim (`#C8102E`) é reservado à **marca Unisinos** (header, botões,
-carta fechada) — nenhum cluster usa vermelho.
+Os `id` internos são históricos (ex.: `analisar` = "Comunicar e gerir") — a UI usa
+sempre o `label`. O vermelho carmim (`#C8102E`) é reservado à **marca Unisinos**
+(header, botões, carta fechada) — nenhum cluster usa vermelho.
 
 ## Identidade visual
 
 - Fundo claro institucional (`--color-surface`), acento **carmim `#C8102E`**.
-- Header textual "**UNISINOS** · Start" (placeholder do logo oficial — trocar
-  quando o arquivo estiver disponível).
+- Header textual "**UNISINOS** · Conecta" + "Play no Futuro" (placeholder do logo
+  oficial — trocar quando o arquivo estiver disponível).
 - Cartas: frente carmim com "?"; verso com gradiente do cluster + ícone + nome.
 
 ## Tecnologias
@@ -72,21 +70,21 @@ Next.js 16, React 19, Tailwind CSS 4, lucide-react. Testes com Vitest +
 ## Arquitetura
 
 - `app/data/courses.ts` — os 49 cursos (`id`, `label`, `Icon`).
-- `app/data/clusters.ts` — os 6 clusters (label, tagline, emoji, cor, `courseIds`,
-  2 `lanes`) + `PAIRS_PER_GAME`, `getClusterCourses`, `selectGameCourses`.
-- `app/data/quiz.ts` — `QUESTION_1` (escolhe o cluster) e `getQuestion2(clusterId)`
-  (os 2 caminhos).
+- `app/data/clusters.ts` — os 6 clusters (label, mission, tagline, emoji, cor,
+  `courseIds`) + `CLUSTER_IDS`, `getClusterCourses`.
+- `app/data/quiz.ts` — `QUESTION_1` (a missão; escolhe o cluster).
 - `app/lib/deck.ts` — embaralhamento e montagem do baralho.
 - `app/lib/gameReducer.ts` — **reducer puro** com a máquina de estados
   (peek → playing → checking → won). Testável sem React.
-- `app/hooks/useMemoryGame.ts` — recebe **cluster + caminho** (6 pares) e orquestra
-  reducer + timers (espiada, resolução, cronômetro) + recordes por cluster.
+- `app/hooks/useMemoryGame.ts` — recebe o **cluster** e monta o baralho com todos
+  os cursos dele (tabuleiro variável) + timers (espiada, resolução, cronômetro) +
+  recordes por cluster.
 - `app/lib/scoring.ts` (estrelas), `app/lib/storage.ts` — recordes por `ClusterId`
   (chave `unisinos-memoria-records-clusters`, localStorage, SSR-safe),
   `app/lib/format.ts` (mm:ss).
-- `app/components/` — `Quiz.tsx` (P1 cluster → P2 caminho), `ClusterReveal.tsx`
-  (resultado), `GameFlow.tsx` (fluxo `quiz → reveal → game`), `Header`, `Scoreboard`,
-  `Board`, `Card`, `VictoryModal`; `GameBoard` compõe o jogo.
+- `app/components/` — `Quiz.tsx` (P1 = missão), `ClusterReveal.tsx` (resultado),
+  `GameFlow.tsx` (fluxo `quiz → reveal → game`), `Header`, `Scoreboard`, `Board`,
+  `Card`, `VictoryModal`; `GameBoard` compõe o jogo.
 
 ## Comandos
 

@@ -5,18 +5,18 @@ import Header from './Header';
 import Quiz from './Quiz';
 import ClusterReveal from './ClusterReveal';
 import GameBoard from './GameBoard';
-import { CLUSTERS, type ClusterId, type LaneId } from '../data/clusters';
+import { CLUSTERS, type ClusterId } from '../data/clusters';
 
 type Phase = 'quiz' | 'reveal' | 'game';
 
 export default function GameFlow() {
   const [phase, setPhase] = useState<Phase>('quiz');
-  const [answers, setAnswers] = useState<{ clusterId: ClusterId; laneId?: LaneId } | null>(null);
+  const [clusterId, setClusterId] = useState<ClusterId | null>(null);
 
-  const cluster = answers ? CLUSTERS[answers.clusterId] : null;
+  const cluster = clusterId ? CLUSTERS[clusterId] : null;
 
   const restartQuiz = () => {
-    setAnswers(null);
+    setClusterId(null);
     setPhase('quiz');
   };
 
@@ -26,8 +26,8 @@ export default function GameFlow() {
 
       {phase === 'quiz' && (
         <Quiz
-          onComplete={(clusterId, laneId) => {
-            setAnswers({ clusterId, laneId });
+          onComplete={(id) => {
+            setClusterId(id);
             setPhase('reveal');
           }}
         />
@@ -37,8 +37,8 @@ export default function GameFlow() {
         <ClusterReveal cluster={cluster} onStart={() => setPhase('game')} />
       )}
 
-      {phase === 'game' && cluster && answers && (
-        <GameBoard cluster={cluster} laneId={answers.laneId} onRestartQuiz={restartQuiz} />
+      {phase === 'game' && cluster && (
+        <GameBoard cluster={cluster} onRestartQuiz={restartQuiz} />
       )}
     </div>
   );

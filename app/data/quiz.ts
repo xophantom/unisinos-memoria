@@ -1,4 +1,4 @@
-import { CLUSTERS, CLUSTER_IDS, type ClusterId, type LaneId } from './clusters';
+import { CLUSTERS, CLUSTER_IDS, type ClusterId } from './clusters';
 
 export interface QuizOption<T> {
   id: T;
@@ -10,7 +10,7 @@ export interface Question<T> {
   options: QuizOption<T>[];
 }
 
-// P1: o aluno escolhe a missão; o nome do cluster só aparece no resultado.
+// P1 (única pergunta): o aluno escolhe a missão; o nome do cluster só aparece no resultado.
 export const QUESTION_1: Question<ClusterId> = {
   prompt: 'Você tem uma missão para o seu futuro. Qual será?',
   options: CLUSTER_IDS.map((id) => ({
@@ -19,13 +19,3 @@ export const QUESTION_1: Question<ClusterId> = {
     emoji: CLUSTERS[id].emoji,
   })),
 };
-
-// P2: só existe no cluster "criar" (2 caminhos). Nos demais, devolve null.
-export function getQuestion2(clusterId: ClusterId): Question<LaneId> | null {
-  const cluster = CLUSTERS[clusterId];
-  if (!cluster.lanes) return null;
-  return {
-    prompt: 'Você se identifica mais com:',
-    options: cluster.lanes.map((l) => ({ id: l.id, label: l.label, emoji: l.emoji })),
-  };
-}

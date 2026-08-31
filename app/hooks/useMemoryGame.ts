@@ -4,14 +4,14 @@
 import { useReducer, useEffect, useState, useCallback, useRef } from 'react';
 import { gameReducer, initialState, type GameState } from '../lib/gameReducer';
 import { buildDeck } from '../lib/deck';
-import { getGameCourses, type Cluster, type LaneId } from '../data/clusters';
+import { getClusterCourses, type Cluster } from '../data/clusters';
 import { saveResult, loadRecords, type Records } from '../lib/storage';
 
 const PEEK_MS = 2500;
 const MATCH_MS = 500;
 const MISMATCH_MS = 1000;
 
-export function useMemoryGame(cluster: Cluster, laneId?: LaneId): {
+export function useMemoryGame(cluster: Cluster): {
   state: GameState;
   time: number;
   records: Records | null;
@@ -27,10 +27,10 @@ export function useMemoryGame(cluster: Cluster, laneId?: LaneId): {
     setRecords(loadRecords());
   }, []);
 
-  const newGame = useCallback((c: Cluster, lane?: LaneId) => {
+  const newGame = useCallback((c: Cluster) => {
     savedRef.current = false;
     setTime(0);
-    const courses = getGameCourses(c, lane);
+    const courses = getClusterCourses(c.id);
     dispatch({
       type: 'NEW_GAME',
       cards: buildDeck(courses.length, courses),
@@ -38,10 +38,10 @@ export function useMemoryGame(cluster: Cluster, laneId?: LaneId): {
     });
   }, []);
 
-  // (re)inicia ao trocar cluster/caminho e na montagem
+  // (re)inicia ao trocar de cluster e na montagem
   useEffect(() => {
-    newGame(cluster, laneId);
-  }, [cluster, laneId, newGame]);
+    newGame(cluster);
+  }, [cluster, newGame]);
 
   // fim da espiada — reinicia a cada novo jogo (state.gameId muda)
   useEffect(() => {
@@ -79,7 +79,7 @@ export function useMemoryGame(cluster: Cluster, laneId?: LaneId): {
   }, [state.phase, cluster.id, state.moves, time]);
 
   const flip = useCallback((id: number) => dispatch({ type: 'FLIP', id }), []);
-  const restart = useCallback(() => newGame(cluster, laneId), [newGame, cluster, laneId]);
+  const restart = useCallback(() => newGame(cluster), [newGame, cluster]);
 
   return { state, time, records, flip, restart };
 }

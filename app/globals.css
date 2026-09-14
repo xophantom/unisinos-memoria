@@ -3,20 +3,38 @@
 @theme {
   --color-unisinos: #C8102E;
   --color-unisinos-dark: #A00C24;
-  --color-surface: #f6f5f3;
+  /* Cores da arte de fundo "Cria teu caminho" (public/background.png) */
+  --color-cobalt: #21409A;
+  --color-cobalt-deep: #1D388A;
+  --color-sticker: #DC4000;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 :root {
-  --background: #f6f5f3;
-  --foreground: #1a1a1a;
+  --background: #21409A;
+  --foreground: #ffffff;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, Arial, sans-serif;
+}
+
+/* Arte de fundo fixa atrás de todo o app.
+   Camada própria (em vez de background-attachment: fixed, instável no iOS)
+   para a moldura de stickers não rolar com o conteúdo. */
+.app-background {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--background);
+  background-image: url("/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* Flip 3D das cartas */

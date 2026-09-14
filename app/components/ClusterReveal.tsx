@@ -16,7 +16,7 @@ export default function ClusterReveal({ cluster, onStart }: Props) {
   }, []);
 
   return (
-    <div className="w-full max-w-lg mx-auto flex flex-col items-center gap-4 text-center">
+    <div className="w-full max-w-lg mx-auto flex flex-col items-center gap-4 text-center bg-white rounded-3xl px-6 py-8 ring-1 ring-black/5 shadow-xl shadow-cobalt-deep/30">
       <div className="text-6xl" aria-hidden>{cluster.emoji}</div>
       <p className="text-neutral-500 font-semibold">Você tem tudo a ver com</p>
       <h2

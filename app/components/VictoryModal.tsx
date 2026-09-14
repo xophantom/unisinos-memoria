@@ -29,7 +29,7 @@ export default function VictoryModal({ moves, time, stars, courses, onRestart, o
       onKeyDown={(e) => {
         if (e.key === 'Escape') onRestart();
       }}
-      className="fixed inset-0 z-20 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-20 flex items-center justify-center bg-cobalt-deep/70 backdrop-blur-sm p-4"
     >
       <div className="bg-white rounded-3xl p-8 text-center shadow-2xl max-w-sm w-full">
         <Trophy className="w-14 h-14 text-amber-400 mx-auto mb-3" aria-hidden />

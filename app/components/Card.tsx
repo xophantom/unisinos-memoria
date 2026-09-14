@@ -28,7 +28,7 @@ export default function Card({ id, course, gradient, isFlipped, isMatched, locke
       aria-label={ariaLabel}
       aria-pressed={faceUp}
       onClick={handleClick}
-      className="group w-full aspect-square perspective-1000 rounded-xl focus:outline-none focus-visible:ring-4 focus-visible:ring-unisinos/40"
+      className="group w-full aspect-square perspective-1000 rounded-xl focus:outline-none focus-visible:ring-4 focus-visible:ring-white/70"
     >
       <div
         className={`card-flip relative w-full h-full transition-transform duration-500 transform-style-3d ${
@@ -36,7 +36,7 @@ export default function Card({ id, course, gradient, isFlipped, isMatched, locke
         }`}
       >
         {/* Frente (fechada) */}
-        <div className="absolute inset-0 backface-hidden rounded-xl bg-gradient-to-br from-unisinos to-unisinos-dark flex items-center justify-center shadow-md ring-1 ring-black/5 group-hover:brightness-110 transition">
+        <div className="absolute inset-0 backface-hidden rounded-xl bg-gradient-to-br from-unisinos to-unisinos-dark flex items-center justify-center shadow-md ring-1 ring-white/25 group-hover:brightness-110 transition">
           <span className="text-white/90 text-2xl font-black select-none">?</span>
         </div>
 

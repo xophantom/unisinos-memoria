@@ -21,7 +21,7 @@ export default function GameFlow() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-8 w-full max-w-2xl mx-auto px-4 py-8">
+    <div className="flex flex-col items-center gap-8 w-full max-w-2xl mx-auto px-4 pt-[clamp(2rem,13vh,7rem)] pb-[clamp(2.5rem,12vh,7rem)]">
       <Header />
 
       {phase === 'quiz' && (

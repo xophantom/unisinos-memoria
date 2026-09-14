@@ -20,7 +20,7 @@ export default function Quiz({ onComplete }: Props) {
       <h2
         ref={headingRef}
         tabIndex={-1}
-        className="text-2xl font-extrabold text-neutral-900 text-center focus:outline-none"
+        className="text-2xl font-extrabold text-white text-center focus:outline-none"
       >
         {QUESTION_1.prompt}
       </h2>
@@ -30,7 +30,7 @@ export default function Quiz({ onComplete }: Props) {
             key={o.id}
             type="button"
             onClick={() => onComplete(o.id)}
-            className="flex items-center gap-3 w-full text-left px-5 py-4 rounded-2xl bg-white ring-1 ring-neutral-200 hover:ring-unisinos hover:bg-neutral-50 font-semibold text-neutral-800 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-unisinos/40"
+            className="flex items-center gap-3 w-full text-left px-5 py-4 rounded-2xl bg-white ring-1 ring-black/5 shadow-lg shadow-cobalt-deep/30 hover:ring-unisinos hover:-translate-y-0.5 font-semibold text-neutral-800 transition-all focus:outline-none focus-visible:ring-4 focus-visible:ring-white/70"
           >
             <span className="text-2xl shrink-0" aria-hidden>{o.emoji}</span>
             <span>{o.label}</span>

@@ -29,7 +29,7 @@ export default function GameBoard({ cluster, onRestartQuiz }: Props) {
   return (
     <div className="flex flex-col items-center gap-6 w-full max-w-2xl mx-auto">
       <div className="contents" inert={won || undefined}>
-        <div className="flex items-center gap-2 text-sm font-semibold text-neutral-500">
+        <div className="flex items-center gap-2 text-sm font-semibold text-white/80">
           <span className="text-lg" aria-hidden>{cluster.emoji}</span>
           {cluster.label}
         </div>
@@ -47,7 +47,7 @@ export default function GameBoard({ cluster, onRestartQuiz }: Props) {
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 w-full">
             {Array.from({ length: 12 }).map((_, i) => (
-              <div key={i} className="aspect-square rounded-xl bg-neutral-200 animate-pulse" />
+              <div key={i} className="aspect-square rounded-xl bg-white/15 animate-pulse" />
             ))}
           </div>
         )}
@@ -56,7 +56,7 @@ export default function GameBoard({ cluster, onRestartQuiz }: Props) {
           <button
             type="button"
             onClick={restart}
-            className="flex items-center gap-2 px-6 py-3 bg-white ring-1 ring-neutral-200 hover:bg-neutral-50 text-neutral-700 font-semibold rounded-full transition-all"
+            className="flex items-center gap-2 px-6 py-3 bg-white ring-1 ring-black/5 shadow-lg shadow-cobalt-deep/30 hover:bg-neutral-50 text-neutral-700 font-semibold rounded-full transition-all"
           >
             <RotateCcw className="w-4 h-4" aria-hidden />
             Reiniciar
@@ -64,7 +64,7 @@ export default function GameBoard({ cluster, onRestartQuiz }: Props) {
           <button
             type="button"
             onClick={onRestartQuiz}
-            className="px-6 py-3 text-neutral-500 hover:text-neutral-800 font-semibold rounded-full transition-colors"
+            className="px-6 py-3 text-white/75 hover:text-white font-semibold rounded-full transition-colors"
           >
             Refazer o teste
           </button>

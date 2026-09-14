@@ -26,7 +26,7 @@ function Stat({ label, value, icon }: { label: string; value: string; icon?: boo
 
 export default function Scoreboard({ moves, matches, totalPairs, time, best }: Props) {
   return (
-    <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 bg-white ring-1 ring-neutral-200 rounded-2xl px-6 py-3 shadow-sm">
+    <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 bg-white ring-1 ring-black/5 rounded-2xl px-6 py-3 shadow-lg shadow-cobalt-deep/30">
       <Stat label="Jogadas" value={String(moves)} />
       <Stat label="Pares" value={`${matches}/${totalPairs}`} />
       <Stat label="Tempo" value={formatTime(time)} />

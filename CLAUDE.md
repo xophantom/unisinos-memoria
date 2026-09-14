@@ -57,7 +57,15 @@ sempre o `label`. O vermelho carmim (`#C8102E`) é reservado à **marca Unisinos
 
 ## Identidade visual
 
-- Fundo claro institucional (`--color-surface`), acento **carmim `#C8102E`**.
+- Fundo: arte **`public/background.png`** (`.app-background`, camada fixa, `cover`) —
+  azul cobalto `#21409A` com moldura de stickers no topo (~13% da altura) e no
+  rodapé (~10%, com a frase "Cria teu caminho"). O conteúdo fica na zona segura
+  central; `GameFlow` reserva esse respiro com padding em `vh`.
+- Paleta da arte: cobalto `#21409A` (`--color-cobalt`), sombra `#1D388A`
+  (`--color-cobalt-deep`), laranja dos stickers `#DC4000` (`--color-sticker`).
+- Sobre o azul, textos soltos são brancos e os painéis (quiz, resultado, placar,
+  vitória) são cartões brancos — os gradientes dos clusters só aparecem sobre branco.
+- Acento de marca **carmim `#C8102E`**: CTAs e carta fechada.
 - Header textual "**UNISINOS** · Conecta" + "Play no Futuro" (placeholder do logo
   oficial — trocar quando o arquivo estiver disponível).
 - Cartas: frente carmim com "?"; verso com gradiente do cluster + ícone + nome.

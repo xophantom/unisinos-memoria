@@ -29,9 +29,9 @@ export default function VictoryModal({ moves, time, stars, courses, onRestart, o
       onKeyDown={(e) => {
         if (e.key === 'Escape') onRestart();
       }}
-      className="fixed inset-0 z-20 flex items-center justify-center bg-cobalt-deep/70 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-20 flex items-center justify-center overflow-y-auto no-scrollbar bg-cobalt-deep/70 backdrop-blur-sm p-4"
     >
-      <div className="bg-white rounded-3xl p-8 text-center shadow-2xl max-w-sm w-full">
+      <div className="bg-white rounded-3xl p-8 text-center shadow-2xl max-w-sm w-full my-auto">
         <Trophy className="w-14 h-14 text-amber-400 mx-auto mb-3" aria-hidden />
         <h2 className="text-3xl font-extrabold text-neutral-900 mb-1">Parabéns!</h2>
         <div className="flex justify-center gap-1 my-3" aria-label={`${stars} de 3 estrelas`}>

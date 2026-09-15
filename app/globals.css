@@ -22,6 +22,26 @@ body {
   font-family: var(--font-geist-sans), system-ui, Arial, sans-serif;
 }
 
+/* Rolagem sem barra visível — a barra cortava a arte de fundo nas telas
+   mais altas (tabuleiros grandes, vitória). O scroll continua funcionando
+   por roda, toque, teclado e arrasto. */
+html,
+body {
+  scrollbar-width: none;      /* Firefox */
+  -ms-overflow-style: none;   /* Edge legado */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none;              /* Chrome, Safari */
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 /* Arte de fundo fixa atrás de todo o app.
    Camada própria (em vez de background-attachment: fixed, instável no iOS)
    para a moldura de stickers não rolar com o conteúdo. */

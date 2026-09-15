@@ -64,7 +64,7 @@ export default function GameBoard({ cluster, onRestartQuiz }: Props) {
           <button
             type="button"
             onClick={onRestartQuiz}
-            className="px-6 py-3 text-white/75 hover:text-white font-semibold rounded-full transition-colors"
+            className="px-6 py-3 bg-white ring-1 ring-black/5 shadow-lg shadow-cobalt-deep/30 hover:bg-neutral-50 text-neutral-700 font-semibold rounded-full transition-all"
           >
             Refazer o teste
           </button>

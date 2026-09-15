@@ -19,7 +19,8 @@ Fluxo:
    no resultado.
 2. Tela de **resultado** ("Você tem tudo a ver com [Cluster]! · Conheça os cursos
    perfeitos para o seu futuro!") → botão **Jogar**.
-3. **Jogo:** espiada inicial ~2,5s, depois vira 2 cartas por vez procurando o par.
+3. **Jogo:** espiada inicial (2,5s a 4,8s, conforme o tamanho do tabuleiro), depois
+   vira 2 cartas por vez procurando o par.
 4. **Vitória:** estrelas, jogadas, tempo e os **cursos que apareceram** ("Nos vemos
    na Unisinos em:"); botões **Jogar de novo** (mesmo cluster) e **Refazer o teste**.
 
@@ -29,7 +30,8 @@ Fluxo:
 - **6 clusters** que filtram os cursos (pools em `app/data/clusters.ts`).
 - **Tabuleiro de tamanho variável:** nº de pares = nº de cursos do cluster
   (de 4 a 12 pares). Sem tiers de dificuldade.
-- **Espiada inicial** ~2,5s; **flip 3D** (respeita "reduzir movimento").
+- **Espiada inicial proporcional ao tabuleiro** (`app/lib/timing.ts`:
+  1200ms + 300ms/par, entre 2,5s e 5s); **flip 3D** (respeita "reduzir movimento").
 - **Placar em tempo real:** jogadas, pares, cronômetro.
 - **Recordes persistentes por cluster** (localStorage): melhor nº de jogadas e menor tempo.
 - **Estrelas (1–3)** por eficiência na tela de vitória.
@@ -87,6 +89,7 @@ Next.js 16, React 19, Tailwind CSS 4, lucide-react. Testes com Vitest +
 - `app/hooks/useMemoryGame.ts` — recebe o **cluster** e monta o baralho com todos
   os cursos dele (tabuleiro variável) + timers (espiada, resolução, cronômetro) +
   recordes por cluster.
+- `app/lib/timing.ts` — duração da espiada por nº de pares.
 - `app/lib/scoring.ts` (estrelas), `app/lib/storage.ts` — recordes por `ClusterId`
   (chave `unisinos-memoria-records-clusters`, localStorage, SSR-safe),
   `app/lib/format.ts` (mm:ss).

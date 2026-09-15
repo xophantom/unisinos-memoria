@@ -6,8 +6,8 @@ import { gameReducer, initialState, type GameState } from '../lib/gameReducer';
 import { buildDeck } from '../lib/deck';
 import { getClusterCourses, type Cluster } from '../data/clusters';
 import { saveResult, loadRecords, type Records } from '../lib/storage';
+import { peekDurationMs } from '../lib/timing';
 
-const PEEK_MS = 2500;
 const MATCH_MS = 500;
 const MISMATCH_MS = 1000;
 
@@ -46,9 +46,9 @@ export function useMemoryGame(cluster: Cluster): {
   // fim da espiada — reinicia a cada novo jogo (state.gameId muda)
   useEffect(() => {
     if (state.phase !== 'peek') return;
-    const t = setTimeout(() => dispatch({ type: 'END_PEEK' }), PEEK_MS);
+    const t = setTimeout(() => dispatch({ type: 'END_PEEK' }), peekDurationMs(state.totalPairs));
     return () => clearTimeout(t);
-  }, [state.phase, state.gameId]);
+  }, [state.phase, state.gameId, state.totalPairs]);
 
   // resolve o par após duas cartas viradas
   useEffect(() => {

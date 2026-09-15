@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useMemoryGame } from './useMemoryGame';
 import { CLUSTERS } from '../data/clusters';
+import { peekDurationMs } from '../lib/timing';
 
 describe('useMemoryGame', () => {
   beforeEach(() => vi.useFakeTimers());
@@ -13,7 +14,7 @@ describe('useMemoryGame', () => {
     expect(result.current.state.cards).toHaveLength(18);
     expect(result.current.state.totalPairs).toBe(9);
     expect(result.current.state.phase).toBe('peek');
-    act(() => { vi.advanceTimersByTime(2500); });
+    act(() => { vi.advanceTimersByTime(peekDurationMs(9)); });
     expect(result.current.state.phase).toBe('playing');
   });
 
@@ -22,6 +23,16 @@ describe('useMemoryGame', () => {
     act(() => { vi.advanceTimersByTime(0); });
     expect(result.current.state.cards).toHaveLength(8);
     expect(result.current.state.totalPairs).toBe(4);
+  });
+
+  it('a espiada dura mais nos tabuleiros maiores', () => {
+    const { result } = renderHook(() => useMemoryGame(CLUSTERS.desenvolver));
+    act(() => { vi.advanceTimersByTime(0); });
+    expect(result.current.state.totalPairs).toBe(12);
+    act(() => { vi.advanceTimersByTime(peekDurationMs(4)); }); // piso dos pequenos
+    expect(result.current.state.phase).toBe('peek');
+    act(() => { vi.advanceTimersByTime(peekDurationMs(12) - peekDurationMs(4)); });
+    expect(result.current.state.phase).toBe('playing');
   });
 
   it('flip é ignorado durante a espiada', () => {
@@ -34,7 +45,7 @@ describe('useMemoryGame', () => {
   it('cronômetro continua contando na transição playing → checking', () => {
     const { result } = renderHook(() => useMemoryGame(CLUSTERS.analisar));
     act(() => { vi.advanceTimersByTime(0); });
-    act(() => { vi.advanceTimersByTime(2500); }); // fim da espiada
+    act(() => { vi.advanceTimersByTime(peekDurationMs(9)); }); // fim da espiada
     act(() => { result.current.flip(0); });
     act(() => { vi.advanceTimersByTime(900); });
     act(() => { result.current.flip(1); });
